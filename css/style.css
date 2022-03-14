@@ -2,8 +2,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Encode Sans';
 }
+
 
 .navbar {
     background: #141414;
@@ -16,9 +16,17 @@
     position: fixed;
 }
 
+.file-menu-scroll a {
+    font-weight: 500;
+    
+}
+
+.menu-opened a  {
+    font-weight: 100;
+}
 a {
+    font-family: 'Encode Sans';
     text-decoration: none;
-    font-weight: 600;
     color: #EAEAEA;
     font-size: 14px;
 }
@@ -32,22 +40,31 @@ a {
     width: 180px;
 }
 
-#file-menu ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
 .menu-opened { /* cache les sous listes */
-    max-height:0;
+    max-height: 0;
     overflow: hidden;
+    display: block;
 }
 
 
 /* On ouvre le menu quand on clique */
 .open .menu-opened { /* affiche le reste de la liste*/
     max-height: 15em;
+    font-family: 'Encode Sans';
+    font-weight: normal;
+    width: 108px;
     position: absolute;
+    top: 100%;
+    transform: translateX(70%);
+    background-color: #141414;
+    line-height: 1.5em;
+    text-align: left;
+    border: 0.3px solid #EAEAEA;
+    box-sizing: border-box;
+    box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+    padding-left: 0.5em;
+
 }
 
 .file-menu-scroll, #tools-menu ul li {
