@@ -2,29 +2,99 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
     font-family: 'Encode Sans';
 }
 
 .navbar {
     background: #141414;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     height: 50px;
     width: 100%;
-    margin: 0 auto;
-    position: fixed;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
 }
 
-a {
+/* ## File Menu ## */
+.file-menu-scroll {
+    margin-left: 30px;
+    display: flex;
+}
+.file-menu-scroll a {
+    color: #EAEAEA;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+}
+.file-menu-scroll > a {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    font-weight: 500;  
+    height: 25px;
+    width: 37px;
+}
+#arrow-scroll {
+    margin-top: 4px;
+    height: 7px;
+    width: 10px;
+}
+
+.menu-opened {
+    display: none; /* n'affiche pas les List Item (li) de la liste mère menu-opened */
+}
+.menu-opened a {
+    display: flex;
+}
+
+.file-menu-scroll:hover .menu-opened {
+    background-color: #141414;
+    width: 108px;
+    height: 75px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding-top: 5px;
+    padding-left: 20px;
+
+    position: absolute;
+    top: 35px; /* menu-opened s'affiche à 35px du haut */
+    
+    border: 0.3px solid #EAEAEA;
+    box-sizing: border-box;
+    box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+}
+.file-menu-scroll:hover #arrow-scroll { /* descend la flèche quand hover */
+    margin-top: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* a {
     text-decoration: none;
     font-weight: 600;
     color: #EAEAEA;
     font-size: 14px;
-}
+} */
 
 /* Menu déroulant File */
-#file-menu {
+/* #file-menu {
     padding: 0;
     margin: 0;
     list-style: none;
@@ -36,26 +106,26 @@ a {
     padding: 0;
     margin: 0;
     list-style: none;
-}
+} */
 
-.menu-opened { /* cache les sous listes */
-    max-height:0;
+/* .menu-opened { /* cache les sous listes */
+    /* max-height:0;
     overflow: hidden;
-}
+} */ 
 
 
 /* On ouvre le menu quand on clique */
-.open .menu-opened { /* affiche le reste de la liste*/
-    max-height: 15em;
+/* .open .menu-opened { /* affiche le reste de la liste*/
+    /* max-height: 15em;
     position: absolute;
-}
+} */ 
 
-.file-menu-scroll, #tools-menu ul li {
+/* .file-menu-scroll, #tools-menu ul li {
     list-style-type: none;
-}
+} */
 
 /* Menu des tools*/
-#tools-menu {
+/* #tools-menu {
     display: flex;
     flex-direction: row;
 }
@@ -71,7 +141,7 @@ a {
     background-size: cover;
     width: 20px;
     height: 15px;
-}
+} */
 
 
 
