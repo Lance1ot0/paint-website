@@ -4,7 +4,6 @@
     box-sizing: border-box;
     list-style: none;
     text-decoration: none;
-    font-family: 'Encode Sans';
 }
 
 .navbar {
@@ -12,43 +11,51 @@
     height: 50px;
     width: 100%;
     display: flex;
-    /* justify-content: center; */
+    /* justify-content: space-between; */
     align-items: center;
+    margin: 0 auto;
+    position: fixed;
 }
 
-/* ## File Menu ## */
+/* File Menu */
 .file-menu-scroll {
     margin-left: 30px;
     display: flex;
 }
-.file-menu-scroll a {
+
+a {
+    font-family: 'Encode Sans';
+    text-decoration: none;
     color: #EAEAEA;
+}
+
+.file-menu-scroll a {
     font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 0.875em;
 }
-.file-menu-scroll > a {
+
+.menu-opened a  {
     display: flex;
-    align-items: center;
-    column-gap: 5px;
-    font-weight: 500;  
-    height: 25px;
-    width: 37px;
+    font-weight: 200;
+    font-size: 0.750em;
 }
+
+/* Flèche du menu déroulant */
 #arrow-scroll {
     margin-top: 4px;
+    margin-left: 5px;
     height: 7px;
     width: 10px;
 }
 
+/* N'affiche pas les List Item (li) de la liste mère menu-opened */
 .menu-opened {
-    display: none; /* n'affiche pas les List Item (li) de la liste mère menu-opened */
-}
-.menu-opened a {
-    display: flex;
+    display: none; 
 }
 
-.file-menu-scroll:hover .menu-opened {
+/* Quand le menu est ouvert au clic */
+.open .file-menu-scroll .menu-opened {
     background-color: #141414;
     width: 108px;
     height: 75px;
@@ -56,22 +63,26 @@
     display: flex;
     flex-direction: column;
     row-gap: 5px;
-    padding-top: 5px;
+    padding-top: 10px;
     padding-left: 20px;
 
     position: absolute;
-    top: 35px; /* menu-opened s'affiche à 35px du haut */
+    top: 40px; /* menu-opened s'affiche à 35px du haut */
     
     border: 0.3px solid #EAEAEA;
     box-sizing: border-box;
     box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
     border-radius: 1px;
 }
-.file-menu-scroll:hover #arrow-scroll { /* descend la flèche quand hover */
+
+/* Descendre la flèche quand hover */
+.open .file-menu-scroll #arrow-scroll { 
     margin-top: 6px;
 }
 
-
+.menu-opened a:hover {
+    background-color: #1F1F1F;
+}
 
 
 
