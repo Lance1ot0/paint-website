@@ -2,37 +2,110 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
 }
 
 
 .navbar {
     background: #141414;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     height: 50px;
     width: 100%;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
     margin: 0 auto;
     position: fixed;
 }
 
-.file-menu-scroll a {
-    font-weight: 500;
-    
+/* File Menu */
+.file-menu-scroll {
+    margin-left: 30px;
+    display: flex;
 }
 
-.menu-opened a  {
-    font-weight: 100;
-}
 a {
     font-family: 'Encode Sans';
     text-decoration: none;
     color: #EAEAEA;
-    font-size: 14px;
 }
 
+.file-menu-scroll a {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.875em;
+}
+
+.menu-opened a  {
+    display: flex;
+    font-weight: 200;
+    font-size: 0.750em;
+}
+
+/* Flèche du menu déroulant */
+#arrow-scroll {
+    margin-top: 4px;
+    margin-left: 5px;
+    height: 7px;
+    width: 10px;
+}
+
+/* N'affiche pas les List Item (li) de la liste mère menu-opened */
+.menu-opened {
+    display: none; 
+}
+
+/* Quand le menu est ouvert au clic */
+.open .file-menu-scroll .menu-opened {
+    background-color: #141414;
+    width: 108px;
+    height: 75px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding-top: 10px;
+    padding-left: 20px;
+
+    position: absolute;
+    top: 40px; /* menu-opened s'affiche à 35px du haut */
+    
+    border: 0.3px solid #EAEAEA;
+    box-sizing: border-box;
+    box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+}
+
+/* Descendre la flèche quand hover */
+.open .file-menu-scroll #arrow-scroll { 
+    margin-top: 6px;
+}
+
+.menu-opened a:hover {
+    background-color: #1F1F1F;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* a {
+    text-decoration: none;
+    color: #EAEAEA;
+    font-size: 14px;
+} */
+
 /* Menu déroulant File */
-#file-menu {
+/* #file-menu {
     padding: 0;
     margin: 0;
     list-style: none;
@@ -40,39 +113,30 @@ a {
     width: 180px;
 }
 
-.menu-opened { /* cache les sous listes */
-    max-height: 0;
+#file-menu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+} */
+
+/* .menu-opened { /* cache les sous listes */
+    /* max-height:0;
     overflow: hidden;
-    display: block;
-}
+} */ 
 
 
 /* On ouvre le menu quand on clique */
-.open .menu-opened { /* affiche le reste de la liste*/
-    max-height: 15em;
-    font-family: 'Encode Sans';
-    font-weight: normal;
-    width: 108px;
+/* .open .menu-opened { /* affiche le reste de la liste*/
+    /* max-height: 15em;
     position: absolute;
-    top: 100%;
-    transform: translateX(70%);
-    background-color: #141414;
-    line-height: 1.5em;
-    text-align: left;
-    border: 0.3px solid #EAEAEA;
-    box-sizing: border-box;
-    box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
-    border-radius: 1px;
-    padding-left: 0.5em;
+} */ 
 
-}
-
-.file-menu-scroll, #tools-menu ul li {
+/* .file-menu-scroll, #tools-menu ul li {
     list-style-type: none;
-}
+} */
 
 /* Menu des tools*/
-#tools-menu {
+/* #tools-menu {
     display: flex;
     flex-direction: row;
 }
@@ -88,7 +152,7 @@ a {
     background-size: cover;
     width: 20px;
     height: 15px;
-}
+} */
 
 
 
