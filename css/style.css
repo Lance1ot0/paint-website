@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Encode Sans';
+}
+
+.navbar {
+    background: #141414;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    margin: 0 auto;
+    position: fixed;
+}
+
+a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #EAEAEA;
+    font-size: 14px;
+}
+
+/* Menu déroulant File */
+#file-menu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    width: 180px;
+}
+
+#file-menu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menu-opened { /* cache les sous listes */
+    max-height:0;
+    overflow: hidden;
+}
+
+
+/* On ouvre le menu quand on clique */
+.open .menu-opened { /* affiche le reste de la liste*/
+    max-height: 15em;
+    position: absolute;
+}
+
+.file-menu-scroll, #tools-menu ul li {
+    list-style-type: none;
+}
+
+/* Menu des tools*/
+#tools-menu {
+    display: flex;
+    flex-direction: row;
+}
+#move {
+    background: url(../icones/Cursor.svg) no-repeat;
+    background-size: cover;
+    width: 15px;
+    height: 15px;
+}
+
+#rectangle {
+    background: url(../icones/Formes.svg) no-repeat;
+    background-size: cover;
+    width: 20px;
+    height: 15px;
+}
+
+
+
+/* #ellipse {
+
+}
+
+#triangle {
+
+} */
