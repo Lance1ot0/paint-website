@@ -15,14 +15,19 @@
 </head>
 <body>
 
-    <header class="wrapper">
+    <div class="wrapper">
         <nav class="navbar">
             <ul id="file-menu">
                 <li class="file-menu-scroll"><a href="#">File <img class="arrow-scroll" src="./icones/Arrow-scroll.svg" alt="scroll-arrow"></a>
                     <ul class="menu-opened">
                         <li><a href="#">Open...</a></li>
                         <li><a href="#">Save</a></li>
-                        <li><a href="#">Export As...</a></li>
+                        <li id="export-as"><a href="#">Export As...</a>
+                            <ul class="export-file">
+                                <li><a href="#">PDF</a></li>
+                                <li><a href="#">JPEG</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -30,17 +35,23 @@
             <div class="tools-menu">
                 <div class="tools" id="move"></div>
                 <ul class="tools">
-                    <li class="shape"><div id="rectangle">
+                    <li class="shape">
+                        <div id="shape-choice">
+                            <div id="rectangle"></div>
+                            <img class="arrow-scroll" src="./icones/Arrow-scroll.svg" alt="scroll-arrow">
+                        </div>
+                        
                         <ul class="shape-opened">
                             <li><div><img src="./icones/Ellipse.svg" alt="" id="ellipse">Ellipse</div></li>
                             <li><div><img src="./icones/Triangle.svg" alt="" id="triangle">Triangle</div></li>
                         </ul>
                     </li>
                 </ul>
+
                 <div class="tools"><img src="./icones/Text.svg" alt="" id="text"></div>
             </div>
         </nav>
-    </header>
+    </div>
 
     <script src="js/app.js"></script>
 </body>
