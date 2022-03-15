@@ -8,17 +8,21 @@
 
 
 .navbar {
-    background: #141414;
+    background: #1F1F1F;
     height: 50px;
     width: 100%;
     display: flex;
-    /* justify-content: space-between; */
     align-items: center;
     margin: 0 auto;
     position: fixed;
 }
 
+
 /* File Menu */
+#file-menu {
+    flex-basis: 43.5%;
+}
+
 .file-menu-scroll {
     margin-left: 30px;
     display: flex;
@@ -40,126 +44,141 @@ a {
     display: flex;
     font-weight: 200;
     font-size: 0.750em;
+    padding-left: 20px;
 }
 
 /* Flèche du menu déroulant */
-#arrow-scroll {
+.arrow-scroll {
     margin-top: 4px;
     margin-left: 5px;
     height: 7px;
     width: 10px;
 }
 
-/* N'affiche pas les List Item (li) de la liste mère menu-opened */
-.menu-opened {
+/* N'affiche pas les List Item (li) de la liste mère menu-opened et du menu tool opened */
+.menu-opened, .shape-opened, .export-file {
     display: none; 
 }
 
-/* Quand le menu est ouvert au clic */
-.open .file-menu-scroll .menu-opened {
+/* Ouvrir le menu file ou menu shape au clic */
+.open-file .file-menu-scroll .menu-opened, .open-shape .shape .shape-opened {
     background-color: #141414;
     width: 108px;
-    height: 75px;
 
     display: flex;
     flex-direction: column;
     row-gap: 5px;
     padding-top: 10px;
-    padding-left: 20px;
+    padding-bottom: 10px;
 
     position: absolute;
-    top: 40px; /* menu-opened s'affiche à 35px du haut */
+    top: 40px;
     
-    border: 0.3px solid #EAEAEA;
+    border: 0 0.2px 0.2px 0.2px solid #EAEAEA;
     box-sizing: border-box;
-    box-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: 0.5px 2px 3px rgba(0, 0, 0, 0.35);
     border-radius: 1px;
 }
 
+/* Ouvrir le menu export au survol */
+.open-export .export-file {
+    background-color: #141414;
+    width: 108px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    position: absolute;
+    top: 40px;
+    left: 108px;
+
+    border: 0 0.2px 0.2px 0.2px solid #EAEAEA;
+    box-sizing: border-box;
+    box-shadow: 0.5px 2px 3px rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+
+}
+
 /* Descendre la flèche quand hover */
-.open .file-menu-scroll #arrow-scroll { 
+.open-file .file-menu-scroll #arrow-scroll { 
     margin-top: 6px;
 }
 
-.menu-opened a:hover {
-    background-color: #1F1F1F;
+
+/* Change la couleur de fond des liens des menus en hover */
+.menu-opened a:hover, .shape-opened li:hover  {
+    background-color: #133346;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* a {
-    text-decoration: none;
-    color: #EAEAEA;
-    font-size: 14px;
-} */
-
-/* Menu déroulant File */
-/* #file-menu {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    text-align: center;
-    width: 180px;
-}
-
-#file-menu ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-} */
-
-/* .menu-opened { /* cache les sous listes */
-    /* max-height:0;
-    overflow: hidden;
-} */ 
-
-
-/* On ouvre le menu quand on clique */
-/* .open .menu-opened { /* affiche le reste de la liste*/
-    /* max-height: 15em;
-    position: absolute;
-} */ 
-
-/* .file-menu-scroll, #tools-menu ul li {
-    list-style-type: none;
-} */
 
 /* Menu des tools*/
-/* #tools-menu {
+.tools-menu {
+    width: 210px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-right: 30px;
+    justify-content: space-between;
+
 }
+
+#shape-choice {
+    display: flex;
+    column-gap: 5px;
+    cursor: pointer;
+    align-items: center;
+}
+
+.open-shape .shape .shape-opened {
+    row-gap: 12px;
+}
+
+.shape-opened li {
+    font-family: 'Encode Sans';
+    color: #eaeaea;
+    font-weight: 200;
+    font-size: 0.750em;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+
+/* Outil pointeur */
 #move {
     background: url(../icones/Cursor.svg) no-repeat;
     background-size: cover;
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
 }
 
+/* Outil rectangle */
 #rectangle {
     background: url(../icones/Formes.svg) no-repeat;
     background-size: cover;
-    width: 20px;
-    height: 15px;
-} */
-
-
-
-/* #ellipse {
-
+    width: 27px;
+    height: 20px;
 }
 
-#triangle {
+/* Outil ellipse */
+#ellipse {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+}
 
-} */
+/* Outil triangle */
+#triangle {
+    width: 20px;
+    height: 18px;
+    margin-right: 10px;
+}
+
+/* Outil texte */
+#text {
+    width: 20px;
+    height: 18px;
+    cursor: pointer;
+}

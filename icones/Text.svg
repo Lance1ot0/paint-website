@@ -1,1 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 153.84 190.98"><defs><style>.b{fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:8px;}</style></defs><polyline class="b" points="4 46.79 4 4 149.84 4 149.84 46.79"/><line class="b" x1="76.92" y1="186.98" x2="76.92" y2="4"/><line class="b" x1="35" y1="186.79" x2="120" y2="186.98"/></svg>
+<svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.286011 3.18505V0.272339H10.714V3.18505" stroke="#EAEAEA" stroke-miterlimit="10"/>
+<path d="M5.5 12.7278V0.272339" stroke="#EAEAEA" stroke-miterlimit="10"/>
+<path d="M2.50259 12.7148L8.58034 12.7278" stroke="#EAEAEA" stroke-miterlimit="10"/>
+</svg>
