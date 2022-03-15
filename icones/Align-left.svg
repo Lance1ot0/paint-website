@@ -1,1 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 48.89"><defs><style>.b{fill:none;stroke:#000;stroke-miterlimit:10;}</style></defs><line class="b" x1="0" y1=".5" x2="52.83" y2=".5"/><line class="b" x1="0" y1="9.28" x2="41" y2="9.5"/><line class="b" x1="0" y1="16.62" x2="52.83" y2="16.62"/><line class="b" x1="0" y1="23.96" x2="57" y2="23.96"/><line class="b" x1="0" y1="32.05" x2="41" y2="32.05"/><line class="b" x1="0" y1="40.3" x2="57" y2="40.3"/><line class="b" x1="0" y1="48.39" x2="41" y2="48.39"/></svg>
+<svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0.255615H26.8784" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 4.74536L20.8597 4.85786" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 8.49866H26.8784" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 12.252H29" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 16.3888H20.8596" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 20.6075H29" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+<path d="M0 24.7444H20.8597" stroke="#EAEAEA" stroke-width="" stroke-miterlimit="10"/>
+</svg>

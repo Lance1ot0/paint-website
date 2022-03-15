@@ -40,7 +40,7 @@ a {
     color: #EAEAEA;
 }
 
-.file-menu-scroll a {
+.file-menu-scroll a, .font-menu a {
     font-style: normal;
     font-weight: 500;
     font-size: 0.875em;
@@ -62,7 +62,7 @@ a {
 }
 
 /* N'affiche pas les List Item (li) de la liste mère menu-opened et du menu tool opened */
-.menu-opened, .shape-opened, .export-file {
+.menu-opened, .shape-opened, .export-file, .font-opened {
     display: none; 
 }
 
@@ -115,7 +115,7 @@ a {
 
 
 /* Change la couleur de fond des liens des menus en hover */
-.menu-opened a:hover, .shape-opened li:hover  {
+.menu-opened a:hover, .shape-opened li:hover, .font-opened a:hover {
     background-color: #133346;
 }
 
@@ -189,31 +189,7 @@ a {
     cursor: pointer;
 }
 
-#ellipse-test {
-    width: 100px;
-    height: 100px;
-    stroke: black;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Blly en cours */
 /* Board / */
-
-
-
 .board {
     width: 100%;
     height: 100vh;
@@ -225,7 +201,6 @@ a {
     position: absolute;
     left: 10%;
     top: 10%;
-    /* transform: translate(-500px, -325px); */
 }
 
 /* / Propriétés / */
@@ -235,20 +210,20 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     position: fixed;
     height: 100%;
     left: 87.5%;
-    
+    row-gap: 100px;
 }
 
 /* / Couleur / */
-.color-propertie {
+.color-property {
     width: 188px;
     height: 312px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* / background-color: blue; */
 }
 
 /* Titre COLOR */
@@ -264,7 +239,6 @@ a {
 .color-title p {
     color: #EAEAEA;
     font-family: "Encode Sans";
-    /* background-color: violet; */
 }
 
 .color-panel {
@@ -272,7 +246,6 @@ a {
     height: 230px;
     display: flex;
     justify-content: space-between;
-    /* background-color: violet; */
 }
 .color-picker {
     width: 160px;
@@ -285,13 +258,12 @@ a {
     background-color: grey;
 }
 
-/* / Color Select / */
+/* Color Select */
 .color-select {
     height: 22px;
     width: 22px;
     display: flex;
     justify-content: space-between;
-    /* / background-color: green; */
 }
 #first-color {
     height: 16px;
@@ -299,28 +271,32 @@ a {
     background-color: #ffffff;
     border: 1px solid #787C7B;
     box-sizing: border-box;
-    /* / place l'élément au dessus d'un autre élément avec un Z inférieur */
-    z-index: 9;
+    /* place l'élément au dessus d'un autre élément avec un Z inférieur */
+    z-index: 9;    
 }
+
 #second-color {
     height: 16px;
     width: 16px;
     background: #000000;
-    border: 1px solid #787C7B;
+    border: 1px solid #787C7B;      
     box-sizing: border-box;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
     margin-top: 6px;
     margin-left: 6px;
     position: absolute;
 }
-/* /* Text / */
-.text-propertie {
+
+/* Text */
+.text-property {
     width: 188px;
-    height: 226px;
-    background: red;
+    height: 153px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* / Titre TEXT / */
+/* Titre TEXT */
 .text-title {
     width: 80px;
     height: 30px;
@@ -336,10 +312,123 @@ a {
     font-family: "Encode Sans";
 }
 
-/* / Paragraphe */ */
-#align-left, #align-center {
+/* Paragraphe */
+.paragraph {
+    margin-left: 10px;
+    width: 137px;
+    height: 25px;
+    /* background: orange; */
+    display: flex;
+    column-gap: 25px;
+    /* justify-content: space-between; */
+}
+#align-left, #align-center, #align-right {
     width: 29px;
     height: 25px;
     border: none;
     background: transparent;
+}
+
+/* Font Menu Scroll */
+.font-menu #default-font {
+    padding-left: 10px;
+}
+
+/* Default Font Menu*/
+.font-menu #box-font {
+    height: 25px;
+    border: 1px solid transparent;
+    border-radius: 2px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#box-font .box-open-font {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 1px;
+}
+#box-font .box-open-font .arrow-scroll-font {
+    margin-top: 10px;
+    width: 11px;
+    height: 7px;
+}
+
+/* Hover Font Menu*/
+.font-menu #box-font:hover {
+    border: 1px solid #787C7B;
+    box-sizing: border-box;
+    border-radius: 2px; 
+}
+#box-font:hover .box-open-font {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background-color: #787C7B;
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+}
+#box-font:hover .box-open-font .arrow-scroll-font {
+    margin-top: 10px;
+    width: 11px;
+    height: 7px;
+    background-color: red;
+    background: url(../icones/Arrow-scroll.svg) no-repeat;
+}
+
+/* Onclick Font Menu*/
+.open-font .font-menu .font-opened {
+    background-color: #282828;
+    width: 188px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    position: absolute;
+    
+    border: 0 0.2px 0.2px 0.2px solid #EAEAEA;
+    box-sizing: border-box;
+    box-shadow: 0.5px 2px 3px rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+}   
+.open-font .font-opened a{
+    display: flex;
+    padding-left: 20px;
+}
+.open-font .font-menu #box-font {
+    border: 1px solid #787C7B;
+    box-sizing: border-box;
+    border-radius: 2px; 
+}
+.open-font #box-font .box-open-font {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background-color: #787C7B;
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+}
+.open-font #box-font .box-open-font .arrow-scroll-font {
+    margin-top: 10px;
+    width: 11px;
+    height: 7px;
+    background-color: red;
+    background: url(../icones/Arrow-scroll.svg) no-repeat;
+}
+
+/* Affiche un apercçu de la vrai police indiquée */
+#smooch-sans {
+    font-family: 'Smooch Sans';
+    font-weight: 600;
+}
+
+#nunito {
+    font-family: 'Nunito';
+    font-weight: 600;
 }
