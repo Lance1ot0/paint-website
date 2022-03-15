@@ -11,42 +11,62 @@ let exportToggleMenu = document.querySelector('#export-as')
 let body = document.querySelector('body');
 
 // Attribue une classe spécifique au body lorsque l'on clique sur le menu file et ferme le menu shape s'il est ouvert
-fileToggleMenu.addEventListener('click', function(){
+fileToggleMenu.addEventListener('click', function () {
     body.classList.toggle('open-file');
     body.classList.remove('open-shape');
 });
 
 // Attribue une classe spécifique au body lorsque l'on clique sur le menu shape et ferme le menu file s'il est ouvert
-shapeToggleMenu.addEventListener('click', function(){
+shapeToggleMenu.addEventListener('click', function () {
     body.classList.toggle('open-shape');
     body.classList.remove('open-file');
 });
 
 // Affiche le menu export au survol de la souris
-exportToggleMenu.addEventListener('mouseover', function(){
+exportToggleMenu.addEventListener('mouseover', function () {
     body.classList.toggle('open-export');
 });
 
 // Ferme le menu export au survol de la souris
-exportToggleMenu.addEventListener('mouseout', function(){
+exportToggleMenu.addEventListener('mouseout', function () {
     body.classList.remove('open-export');
 });
 
 
 
 // Initialisation du canvas
-function drawCanvas(){
-    let canvas = document.querySelector('#whiteboard');
+let canvas = document.querySelector('#whiteboard');
+
+function drawCanvas() {
     if (canvas.getContext) {
         let ctx = canvas.getContext('2d');
-    // CTX = context
-    
-        
-        
+
+        // Trouver la position x, y du clique de l'user 
+        let rectPosition =
+
+            // Créer un rectangle
+            canvas.addEventListener('click', function (event) {
+                ctx.fillRect(event.pageX - this.offsetLeft, event.pageY - this.offsetTop, 100, 100);
+            })
     }
 }
+
+
+// function mousemove(event){
+//     console.log("pageX: ",, 
+//     "pageY: ", event.pageY, 
+//     "clientX: ", event.clientX, 
+//     "clientY:", event.clientY)
+// }
+// console.log(mousemove)
+
 // On lance le canva quand la page se charge
-window.onload = drawCanvas
+window.onload = drawCanvas;
+
+
+
+
+
 
 
 // POUR FAIRE DES RECTANGLES
