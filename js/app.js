@@ -111,3 +111,30 @@ window.onload = drawCanvas;
     //     ctx.arc(x, y, rayon, angleInitial, angleFinal, antihoraire);
     //     ctx.fill();
     //     ctx.stroke()
+
+
+
+// Change la police global quand on clique dessus
+let encodeSans = document.querySelector('#encode-sans');
+let smoochSans = document.querySelector('#smooch-sans');
+let nunito = document.querySelector('#nunito');
+let defaultFont = document.getElementById("default-font");
+
+encodeSans.addEventListener('click', function(){
+    body.style.fontFamily = "Encode Sans";
+    defaultFont.innerHTML = "Encode Sans";
+    defaultFont.style.fontFamily = "Encode Sans";
+    
+});
+smoochSans.addEventListener('click', function(){
+    body.style.fontFamily = "Smooch Sans";
+    defaultFont.innerHTML = "Smooch Sans";
+    defaultFont.style.fontFamily = "Smooch Sans";
+    
+});
+nunito.addEventListener('click', function(){
+    body.style.fontFamily = "Nunito";
+    defaultFont.innerHTML = "Nunito";
+    defaultFont.style.fontFamily = "Nunito";
+    
+});
