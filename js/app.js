@@ -47,8 +47,10 @@ fontToggleMenu.addEventListener('click', function () {
 
 
 // Initialisation du canvas
-let canvas = document.querySelector('#whiteboard');
+let canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
+
+let shapes = [];
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page
 const canvasPos = canvas.getBoundingClientRect();
@@ -67,18 +69,17 @@ canvas.onmousedown = event => {
     startY = event.clientY - canvasPos.top;
     // On active
     userDrawing = true
-    console.log("x", x, "y", y);
-};
+    console.log("x", startX, "y", startY);
+}
 
-// Création d'un rectangle au mouvement du user
 canvas.onmousemove = event => {
     if (userDrawing == true) {
-        squareWidth = event.clientX - canvasPos.left
-        squareHeight = event.clientY - canvasPos.top;
-        drawRectangle(startX, startY, squareWidth - startX, squareHeight - startY)
+        squareWidth = (event.clientX - canvasPos.left) - startX;
+        squareHeight = (event.clientY - canvasPos.top) - startY;
+        drawRectangle()
         console.log("width", squareWidth, "height", squareHeight)
     }
-};
+}
 
 canvas.onmouseout = stopDrawing;
 canvas.onmouseup = stopDrawing;
@@ -87,18 +88,66 @@ function stopDrawing(){
     event.preventDefault();
     event.stopPropagation();
     userDrawing = false;
-};
 
-function drawRectangle(startPosX, startPosY, width, height) {
-    // Propriétés du rectangle
+    // Ajoute au tableau un object contenant les propriétés de chaque forme
+    shapes.push(
+            {"rect-posX":startX,
+            "rect-posY":startY,
+            "rect-width":squareWidth,
+            "rect-height":squareHeight});
+}
+
+function drawCanvasShapes(){
+    // Parcours le tableau de forme pour les déssiner
+    for(let i = 0; i < shapes.length; i++)
+    {
+        ctx.strokeStyle = "black"
+        ctx.lineWidth = 2;
+        ctx.strokeRect(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"])
+    }
+}
+
+function drawRectangle() {
+    
+    // Effacer le canvas et remettre les formes finales
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCanvasShapes();
+
+    // Propriétés du rectangle
     ctx.strokeStyle = "black"
     ctx.lineWidth = 2;
-    ctx.strokeRect(startPosX, startPosY, width, height)
+    ctx.strokeRect(startX, startY, squareWidth, squareHeight)
 }
 
 
+// Création d'un cercle au mouvement : ellipse.js
 
+
+
+
+
+
+
+
+// POUR FAIRE DES CERCLES
+// arc(x, y, rayon, angleInitial, angleFinal, antihoraire)
+// Dessine un arc de cercle qui est centré à la position (x, y), de rayon r, commençant à angleInitial et finissant à angleFinal en allant dans le sens indiqué par antihoraire (par défaut, horaire).
+// Les anglaes sont en radians, pour convertir des degrés en radiants : radians = (Math.PI/180)*degres
+
+    // ctx.beginPath();
+    //     var x = 200; // Coordonnée x
+    //     var y = 300; // Coordonnée y
+    //     var rayon = 200; // Rayon de l'arc
+    //     var angleInitial = 0; // Point de départ sur le cercle
+    //     var angleFinal = Math.PI + (Math.PI * 180) / 2; // Point d'arrivée sur le cercle
+    //      // Horaire ou antihoraire
+    //     var antihoraire = 4 % 2;
+    //     ctx.arc(x, y, rayon, angleInitial, angleFinal, antihoraire);
+    //     ctx.fill();
+    //     ctx.stroke()
+
+
+    
 // squarePosX = event.pageX - this.offsetLeft
 // squarePosY = event.pageY - this.offsetTop
 // ctx.fillRect(squarePosX, squarePosY, 100, 100);
@@ -117,20 +166,3 @@ function drawRectangle(startPosX, startPosY, width, height) {
     // ctx.fillRect(25, 25, 100, 100);
     //  ctx.clearRect(45, 45, 60, 60);
     //  ctx.strokeRect(50, 50, 50, 50);
-
-// POUR FAIRE DES CERCLES
-// arc(x, y, rayon, angleInitial, angleFinal, antihoraire)
-// Dessine un arc de cercle qui est centré à la position (x, y), de rayon r, commençant à angleInitial et finissant à angleFinal en allant dans le sens indiqué par antihoraire (par défaut, horaire).
-// Les anglaes sont en radians, pour convertir des degrés en radiants : radians = (Math.PI/180)*degres
-
-    // ctx.beginPath();
-    //     var x = 200; // Coordonnée x
-    //     var y = 300; // Coordonnée y
-    //     var rayon = 200; // Rayon de l'arc
-    //     var angleInitial = 0; // Point de départ sur le cercle
-    //     var angleFinal = Math.PI + (Math.PI * 180) / 2; // Point d'arrivée sur le cercle
-    //      // Horaire ou antihoraire
-    //     var antihoraire = 4 % 2;
-    //     ctx.arc(x, y, rayon, angleInitial, angleFinal, antihoraire);
-    //     ctx.fill();
-    //     ctx.stroke()
