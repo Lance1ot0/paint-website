@@ -70,12 +70,6 @@ canvas.onmousedown = event => {
     console.log("x", x, "y", y);
 };
 
-canvas.onmouseup = event => {
-    event.preventDefault();
-    event.stopPropagation();
-    userDrawing = false;
-};
-
 // Création d'un rectangle au mouvement du user
 canvas.onmousemove = event => {
     if (userDrawing == true) {
@@ -84,6 +78,15 @@ canvas.onmousemove = event => {
         drawRectangle(startX, startY, squareWidth - startX, squareHeight - startY)
         console.log("width", squareWidth, "height", squareHeight)
     }
+};
+
+canvas.onmouseout = stopDrawing;
+canvas.onmouseup = stopDrawing;
+
+function stopDrawing(){
+    event.preventDefault();
+    event.stopPropagation();
+    userDrawing = false;
 };
 
 function drawRectangle(startPosX, startPosY, width, height) {
