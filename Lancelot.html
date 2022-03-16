@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            width: 100vw;
+            height: 100vh;
+            background-color: bisque;
+        }
+
+        canvas{
+            top: 100px;
+            left: 100px;
+            position: absolute;
+            background-color: white;
+        }
+
+        div{
+            position: absolute;
+            top: 610px;
+            left: 80px;
+        }
+
+        section{
+            position: absolute;
+            top: 610px;
+            left: 380px; 
+        }
+
+        #redBtn{
+            background-color: red;
+            color: white;
+        }
+        #blueBtn{
+            background-color: blue;
+            color: white;
+        }
+        #blackBtn{
+            background-color: black;
+            color: white;
+        }
+
+        input{
+            margin-left: 20px;
+            padding: 2px 6px;
+        }
+
+        span{
+            font-size: 1.4em;
+            top: 70px;
+            left: 100px;
+            position: absolute;
+            user-select : none;
+        }
+        spanB{
+            font-size: 1.2em;
+            top: 650px;
+            left: 405px;
+            position: absolute;
+            user-select : none; 
+        }
+
+        #lastShapeBtn{
+            font-size: 1.2em;
+            top: 110px;
+            left: 600px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+
+    <span>No shape Selected</span>
+
+    <canvas width="500px" height="500px">
+
+    </canvas>
+
+    <spanB>Color Selected : black</spanB>
+
+    <div>
+        <input type="button" value="Stroke Rect" id="strokeRectShapeBtn">
+        <input type="button" value="Fill Rect" id="filleRectShapeBtn">
+    </div>
+
+    <section>
+        <input type="button" value="Red" id="redBtn">
+        <input type="button" value="Blue" id="blueBtn">
+        <input type="button" value="Black" id="blackBtn">
+    </section>
+
+    <backBtnDiv>
+        <input type="button" value="Back" id="lastShapeBtn">
+    </backBtnDiv>
+
+
+    <script src="Lancelot.js"></script>
+
+</body>
+</html>

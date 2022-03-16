@@ -122,6 +122,8 @@ function drawRectangle() {
 
 // Création d'un cercle au mouvement : ellipse.js
 
+// Création d'un triangle au mouvement : triangle.js
+
 
 
 
