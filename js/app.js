@@ -48,71 +48,58 @@ fontToggleMenu.addEventListener('click', function () {
 
 // Initialisation du canvas
 let canvas = document.querySelector('#whiteboard');
+const ctx = canvas.getContext('2d');
 
-let squarePosX = 0;
-let squarePosY = 0;
+// Récupération du décalage du canvas en x et y par rapport aux margins de la page
+const canvasPos = canvas.getBoundingClientRect();
 
-let mouseDown = false;
+// Pour activer ou non le dessin sur le canvas
+let userDrawing = false;
+let startX = 0;
+let startY = 0;
+let squareWidth = 0;
+let squareHeight = 0;
 
-// rect.w = (e.pageX - this.offsetLeft) - rect.startX;
+// Créer les eventlistener de la souris 
+canvas.onmousedown = event => {
+    // clientX = coordoonée horizontale de la souris
+    startX = event.clientX - canvasPos.left;
+    startY = event.clientY - canvasPos.top;
+    // On active
+    userDrawing = true
+    console.log("x", x, "y", y);
+};
 
-function drawCanvas() {
-    if (canvas.getContext) {
-        let ctx = canvas.getContext('2d');
+canvas.onmouseup = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    userDrawing = false;
+};
 
-
-        // Créer un rectangle
-        canvas.addEventListener('mousedown', function (event) {
-            mouseDown = true;
-
-            if(mouseDown)
-            {
-                squarePosX = event.pageX - this.offsetLeft
-                squarePosY = event.pageY - this.offsetTop
-                ctx.fillRect(squarePosX, squarePosY, 100, 100);
-                console.log(squarePosX, squarePosY)
-
-                canvas.onmousemove = () => { sizeShape(ctx) }
-            }
-            
-        })
-
-        // canvas.addEventListener('mouseover', function(event){
-        //     console.log(event.pageX, "yo")
-        // })
-
-        canvas.addEventListener('mouseoup', function (event) {
-            mouseDown = false
-            console.log("test");
-        })
-
-        
+// Création d'un rectangle au mouvement du user
+canvas.onmousemove = event => {
+    if (userDrawing == true) {
+        squareWidth = event.clientX - canvasPos.left
+        squareHeight = event.clientY - canvasPos.top;
+        drawRectangle(startX, startY, squareWidth - startX, squareHeight - startY)
+        console.log("width", squareWidth, "height", squareHeight)
     }
-}
+};
 
-function sizeShape(ctx) {
+function drawRectangle(startPosX, startPosY, width, height) {
+    // Propriétés du rectangle
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillRect(squarePosX - squarePosX, squarePosY, event.pageX - squarePosX, event.pageY - squarePosY);
-
+    ctx.strokeStyle = "black"
+    ctx.lineWidth = 2;
+    ctx.strokeRect(startPosX, startPosY, width, height)
 }
 
 
-// function mousemove(event){
-//     console.log("pageX: ",, 
-//     "pageY: ", event.pageY, 
-//     "clientX: ", event.clientX, 
-//     "clientY:", event.clientY)
-// }
-// console.log(mousemove)
 
-// On lance le canva quand la page se charge
-window.onload = drawCanvas;
-
-
-
-
-
-
+// squarePosX = event.pageX - this.offsetLeft
+// squarePosY = event.pageY - this.offsetTop
+// ctx.fillRect(squarePosX, squarePosY, 100, 100);
+// console.log(squarePosX, squarePosY)
 
 // POUR FAIRE DES RECTANGLES
 // fillRect(x, y, largeur px, hauteur px)
