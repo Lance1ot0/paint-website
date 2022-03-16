@@ -247,15 +247,11 @@ a {
     display: flex;
     justify-content: space-between;
 }
-.color-picker {
-    width: 160px;
-    height: 230px;
-    background-color: grey;
+#color-chart {
+    border-radius: 2px;
 }
-.color-chart {
-    width: 18px;
-    height: 230px;
-    background-color: grey;
+#color-rainbow {
+    border-radius: 2px;
 }
 
 /* Color Select */
