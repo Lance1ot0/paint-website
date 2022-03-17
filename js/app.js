@@ -154,22 +154,28 @@ function drawRectangle() {
     //     ctx.stroke()
 
 
+
+// Change la police global quand on clique dessus
+let encodeSans = document.querySelector('#encode-sans');
+let smoochSans = document.querySelector('#smooch-sans');
+let nunito = document.querySelector('#nunito');
+let defaultFont = document.getElementById("default-font");
+
+encodeSans.addEventListener('click', function(){
+    body.style.fontFamily = "Encode Sans";
+    defaultFont.innerHTML = "Encode Sans";
+    defaultFont.style.fontFamily = "Encode Sans";
     
-// squarePosX = event.pageX - this.offsetLeft
-// squarePosY = event.pageY - this.offsetTop
-// ctx.fillRect(squarePosX, squarePosY, 100, 100);
-// console.log(squarePosX, squarePosY)
-
-// POUR FAIRE DES RECTANGLES
-// fillRect(x, y, largeur px, hauteur px)
-// Dessine un rectangle rempli.
-
-// strokeRect(x, y, largeur, hauteur)
-// Dessine un contour rectangulaire
-
-// clearRect(x, y, largeur, hauteur)
-// Efface la zone rectangulaire spécifiée, la rendant complètement transparente.
-
-    // ctx.fillRect(25, 25, 100, 100);
-    //  ctx.clearRect(45, 45, 60, 60);
-    //  ctx.strokeRect(50, 50, 50, 50);
+});
+smoochSans.addEventListener('click', function(){
+    body.style.fontFamily = "Smooch Sans";
+    defaultFont.innerHTML = "Smooch Sans";
+    defaultFont.style.fontFamily = "Smooch Sans";
+    
+});
+nunito.addEventListener('click', function(){
+    body.style.fontFamily = "Nunito";
+    defaultFont.innerHTML = "Nunito";
+    defaultFont.style.fontFamily = "Nunito";
+    
+});

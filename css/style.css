@@ -1,3 +1,5 @@
+
+
 * {
     margin: 0;
     padding: 0;
@@ -333,7 +335,8 @@ a {
 /* Default Font Menu*/
 .font-menu #box-font {
     height: 25px;
-    border: 1px solid transparent;
+    border: 1px solid #787C7B;
+    box-sizing: border-box;
     border-radius: 2px; 
     display: flex;
     align-items: center;
@@ -351,13 +354,7 @@ a {
     height: 7px;
 }
 
-/* Hover Font Menu*/
-.font-menu {
-    border: 1px solid #787C7B;
-    box-sizing: border-box;
-    border-radius: 2px; 
-}
-.box-open-font {
+#box-font .box-open-font {
     width: 25px;
     height: 25px;
     border: none;
@@ -366,11 +363,10 @@ a {
     display: flex;
     justify-content: center;
 }
-.box-open-font .arrow-scroll-font {
+#box-font .box-open-font .arrow-scroll-font {
     margin-top: 10px;
     width: 11px;
     height: 7px;
-    background-color: red;
     background: url(../icones/Arrow-scroll.svg) no-repeat;
     cursor: pointer;
 }
@@ -412,20 +408,23 @@ a {
     justify-content: center;
 }
 .open-font #box-font .box-open-font .arrow-scroll-font {
-    margin-top: 10px;
+    margin-top: 12px;
     width: 11px;
     height: 7px;
-    background-color: red;
     background: url(../icones/Arrow-scroll.svg) no-repeat;
 }
 
 /* Affiche un apercçu de la vrai police indiquée */
+#encode-Sans {
+    font-family: 'Encode Sans';
+    font-weight: 500;
+}
 #smooch-sans {
     font-family: 'Smooch Sans';
-    font-weight: 600;
+    font-weight: 500;
 }
-
 #nunito {
     font-family: 'Nunito';
-    font-weight: 600;
+    font-weight: 500;
 }
+
