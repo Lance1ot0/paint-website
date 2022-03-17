@@ -117,21 +117,22 @@ canvas.onmousemove = event => {
 }
 
 canvas.onmouseout = () => {stopDrawing(event);};
-canvas.onmouseup = () => {stopDrawing(event);};
+canvas.onmouseup = () => {stopDrawing(event); console.log(shapes);};
 
 function stopDrawing(event){
     event.preventDefault();
     event.stopPropagation();
-    
-
 
     if(userDrawing)
     {
+        let pickedColor = mainChartColor;
+    
         // Ajoute au tableau un object contenant les propriétés de chaque forme
         if(selectedShape == "rectangle")
         {
             shapes.push(
                 {"shape":"rectangle",
+                "color":pickedColor,
                 "rect-posX":mouseClickPosX,
                 "rect-posY":mouseClickPosY,
                 "rect-width":squareWidth,
@@ -169,10 +170,10 @@ function drawCanvasShapes(){
 
     for(let i = 0; i < shapes.length; i++)
     {
-        ctx.strokeStyle = "black"
         
         if(shapes[i]["shape"] == "rectangle")
         {
+            ctx.strokeStyle = shapes[i]["color"];
             ctx.strokeRect(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"]);
         }
         else if(shapes[i]["shape"] == "ellipse")
@@ -199,12 +200,14 @@ function drawCanvasShapes(){
 
 }
 
+// Dessiner le rectangle
 function drawRectangle() {
     // Propriétés du rectangle
-    ctx.strokeStyle = "black"
+    ctx.strokeStyle = mainChartColor;
     ctx.strokeRect(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight)
 }
 
+// Dessiner ellipse
 function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle) {
     // Propriétés du cercle
     ctx.beginPath();
@@ -213,7 +216,7 @@ function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle) {
     ctx.stroke();
 }
 
-
+// Dessiner triangle
 function drawTriangle() {
     // Propriétés du triangle
     ctx.beginPath();
@@ -226,3 +229,4 @@ function drawTriangle() {
     ctx.stroke()
     ctx.closePath() 
 }
+
