@@ -50,6 +50,11 @@ fontToggleMenu.addEventListener('click', function () {
 let canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
+// Récupération des formes que l'on peut sélectionner
+let rectangleBtn = document.querySelector('#rectangleBtn');
+let ellipseBtn = document.querySelector('#ellipseBtn');
+let triangleBtn = document.querySelector('#triangleBtn');
+
 let shapes = [];
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page

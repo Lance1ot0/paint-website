@@ -77,7 +77,7 @@ function drawTriangle() {
     ctx.lineTo(endX, endY)
     ctx.lineTo(startX - (endX - startX), endY) // Trouver la première
     ctx.lineTo(startX, startY)
-    ctx.fill()
+    ctx.stroke()
     ctx.closePath()  
 }
 

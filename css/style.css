@@ -7,8 +7,8 @@
 }
 
 body {
-    height: 140vh;
-    width: 150%;
+    /* height: 140vh; */
+    width: 100%;
     background-color: #E0E0E0;
 }
 
@@ -161,7 +161,7 @@ a {
 }
 
 /* Outil rectangle */
-#rectangle {
+#rectangleBtn {
     background: url(../icones/Formes.svg) no-repeat;
     background-size: cover;
     width: 27px;
@@ -169,14 +169,14 @@ a {
 }
 
 /* Outil ellipse */
-#ellipse {
+#ellipseBtn {
     width: 18px;
     height: 18px;
     margin-right: 10px;
 }
 
 /* Outil triangle */
-#triangle {
+#triangleBtn {
     width: 20px;
     height: 18px;
     margin-right: 10px;
