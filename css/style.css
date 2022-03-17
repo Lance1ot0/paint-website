@@ -23,12 +23,14 @@ body {
     margin: 0 auto;
     position: fixed;
     z-index: 100;
+    user-select: none;
 }
 
 
 /* File Menu */
 #file-menu {
     flex-basis: 43.5%;
+    
 }
 
 .file-menu-scroll {
@@ -154,7 +156,7 @@ a {
 
 
 /* Outil pointeur */
-#move {
+#moveBtn {
     background: url(../icones/Cursor.svg) no-repeat;
     background-size: cover;
     width: 18px;
@@ -171,21 +173,21 @@ a {
 }
 
 /* Outil ellipse */
-#ellipseBtn {
+#ellipseLogo {
     width: 18px;
     height: 18px;
     margin-right: 10px;
 }
 
 /* Outil triangle */
-#triangleBtn {
+#triangleLogo {
     width: 20px;
     height: 18px;
     margin-right: 10px;
 }
 
 /* Outil texte */
-#text {
+#textLogo {
     width: 20px;
     height: 18px;
     cursor: pointer;
@@ -237,6 +239,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 .color-title p {
     color: #EAEAEA;
@@ -292,6 +295,7 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    user-select: none;
 }
 
 /* Titre TEXT */

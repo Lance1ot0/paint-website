@@ -1,51 +1,3 @@
-// Sélection du menu file
-let fileToggleMenu = document.querySelector('.file-menu-scroll');
-
-// Sélection du menu formes
-let shapeToggleMenu = document.querySelector('.shape')
-
-// Sélection du menu export
-let exportToggleMenu = document.querySelector('#export-as')
-
-// Sélection du menu font
-let fontToggleMenu = document.querySelector(".font-menu")
-
-// Sélection du body
-let body = document.querySelector('body');
-
-// Attribue une classe spécifique au body lorsque l'on clique sur le menu file et ferme le menu shape s'il est ouvert
-fileToggleMenu.addEventListener('click', function () {
-    body.classList.toggle('open-file');
-    body.classList.remove('open-shape');
-    body.classList.remove('open-font')
-});
-
-// Attribue une classe spécifique au body lorsque l'on clique sur le menu shape et ferme le menu file s'il est ouvert
-shapeToggleMenu.addEventListener('click', function () {
-    body.classList.toggle('open-shape');
-    body.classList.remove('open-file');
-    body.classList.remove('open-font')
-});
-
-// Affiche le menu export au survol de la souris
-exportToggleMenu.addEventListener('mouseover', function () {
-    body.classList.toggle('open-export');
-});
-
-// Ferme le menu export au survol de la souris
-exportToggleMenu.addEventListener('mouseout', function () {
-    body.classList.remove('open-export');
-});
-
-// Attribue une classe spécifique au body lorsque l'on clique sur le menu font et ferme le menu font s'il est ouvert
-fontToggleMenu.addEventListener('click', function () {
-    body.classList.toggle('open-font');
-    body.classList.remove('open-file');
-    body.classList.remove('open-shape');
-});
-
-
-
 // Initialisation du canvas
 let canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -54,7 +6,22 @@ const ctx = canvas.getContext('2d');
 let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
+let textBtn = document.querySelector('#textBtn');
+let moveBtn = document.querySelector('#moveBtn');
 
+rectangleBtn.onclick = () => {selectedShape = "rectangle"; console.log()};
+ellipseBtn.onclick = () => {selectedShape = "ellipse";};
+triangleBtn.onclick = () => {selectedShape = "triangle";};
+textBtn.onclick = () => {
+    selectedShape = "text";
+    body.classList.remove('open-file');
+    body.classList.remove('open-shape');
+};
+
+// Forme selectioné par l'utilisateur
+let selectedShape = "rectangle";
+
+// Liste des propriétés des formes
 let shapes = [];
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page
@@ -62,120 +29,200 @@ const canvasPos = canvas.getBoundingClientRect();
 
 // Pour activer ou non le dessin sur le canvas
 let userDrawing = false;
-let startX = 0;
-let startY = 0;
+
+// Position de la souris on click
+let mouseClickPosX = 0;
+let mouseClickPosY = 0;
+
+// Taille du rectangle
 let squareWidth = 0;
 let squareHeight = 0;
 
+// Faire un cercle de 360 degrés
+let endAngle = (Math.PI * 2)
+// Angle de départ de l'ellipse
+let startAngle = 0;
+
+// Position finale souris
+let mouseMovingPosX = 0;
+let mouseMovingPosY = 0;
+
+// Rayon du cercle sur l'axe X et l'axe Y
+let radiusX = 0;
+let radiusY = 0
+
+
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
-    // clientX = coordoonée horizontale de la souris
-    startX = event.clientX - canvasPos.left;
-    startY = event.clientY - canvasPos.top;
-    // On active
+
+    mouseClickPosX = event.clientX - canvasPos.left;
+    mouseClickPosY = event.clientY - canvasPos.top;
+
     userDrawing = true
-    console.log("x", startX, "y", startY);
+    console.log("x", mouseClickPosX, "y", mouseClickPosY);
 }
 
 canvas.onmousemove = event => {
+
+    mouseMovingPosX = (event.clientX - canvasPos.left);
+    mouseMovingPosY = (event.clientY - canvasPos.top);
+
+    
     if (userDrawing == true) {
-        squareWidth = (event.clientX - canvasPos.left) - startX;
-        squareHeight = (event.clientY - canvasPos.top) - startY;
-        drawRectangle()
-        console.log("width", squareWidth, "height", squareHeight)
+
+        // Effacer le canvas et remettre les formes finales
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCanvasShapes();
+        
+        // Si la forme sélectionnée est un rectangle
+        if(selectedShape == "rectangle")
+        {
+            squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
+            squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
+            drawRectangle();
+            console.log("width", squareWidth, "height", squareHeight)
+        }
+
+        // Si la forme sélectionnée est une ellipse
+        else if(selectedShape == "ellipse")
+        {
+
+            // Rayon final lorsque l'user a bougé sa souris
+            radiusX = Math.abs(mouseMovingPosX - mouseClickPosX);
+            radiusY = Math.abs(mouseMovingPosY - mouseClickPosY)
+
+            // Si le rayonX et plus grand que le rayon Y, alors on dessine un cercle de rayonX et inversement
+            if (radiusX > radiusY) {
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle);
+            } else if (radiusY > radiusX) {
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle);
+            }
+            console.log("rayonX", radiusX, "rayonY", radiusY);
+        }
+
+        // Si la forme sélectionnée est un triangle
+        else if(selectedShape == "triangle")
+        {
+            drawTriangle();
+        }
+
+
+        // Si la forme est un texte
+        // else if(selectedShape == "text")
+        // {
+        //     ctx.fillText('Hello world', 100, 259);
+        // }
+        
     }
 }
 
-canvas.onmouseout = stopDrawing;
-canvas.onmouseup = stopDrawing;
+canvas.onmouseout = () => {stopDrawing(event);};
+canvas.onmouseup = () => {stopDrawing(event);};
 
-function stopDrawing(){
+function stopDrawing(event){
     event.preventDefault();
     event.stopPropagation();
-    userDrawing = false;
+    
 
-    // Ajoute au tableau un object contenant les propriétés de chaque forme
-    shapes.push(
-            {"rect-posX":startX,
-            "rect-posY":startY,
-            "rect-width":squareWidth,
-            "rect-height":squareHeight});
+
+    if(userDrawing)
+    {
+        // Ajoute au tableau un object contenant les propriétés de chaque forme
+        if(selectedShape == "rectangle")
+        {
+            shapes.push(
+                {"shape":"rectangle",
+                "rect-posX":mouseClickPosX,
+                "rect-posY":mouseClickPosY,
+                "rect-width":squareWidth,
+                "rect-height":squareHeight});
+        }
+        else if(selectedShape == "ellipse")
+        {
+            shapes.push(
+                {"shape":"ellipse",
+                "centerPosX":mouseClickPosX,
+                "centerPosY":mouseClickPosY,
+                "radiusX":radiusX,
+                "radiusY":radiusY,
+                "endAngle":endAngle});
+        }
+        else if(selectedShape == "triangle")
+        {
+            shapes.push(
+                {"shape":"triangle",
+                "startPosX":mouseClickPosX,
+                "startPosY":mouseClickPosY,
+                "endPosX":mouseMovingPosX,
+                "endPosY":mouseMovingPosY});
+        }
+    }
+
+    console.log(shapes);
+    userDrawing = false;
 }
 
+
+// Redessine toutes les formes sauvegardées sur le canvas
 function drawCanvasShapes(){
     // Parcours le tableau de forme pour les déssiner
+
     for(let i = 0; i < shapes.length; i++)
     {
         ctx.strokeStyle = "black"
-        ctx.lineWidth = 2;
-        ctx.strokeRect(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"])
+        
+        if(shapes[i]["shape"] == "rectangle")
+        {
+            ctx.strokeRect(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"]);
+        }
+        else if(shapes[i]["shape"] == "ellipse")
+        {
+            if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
+                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"]);
+            } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
+                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"]);
+            }
+        }
+        else if(shapes[i]["shape"] == "triangle")
+        {
+            ctx.beginPath();
+            // point de départ du tracé, donc startX, startY
+            ctx.moveTo(shapes[i]["startPosX"], shapes[i]["startPosY"])
+            // Point d'arrivé du tracé, ligne tracée de startX, startY vers endX, endY
+            ctx.lineTo(shapes[i]["endPosX"], shapes[i]["endPosY"])
+            ctx.lineTo(shapes[i]["startPosX"] - (shapes[i]["endPosX"] - shapes[i]["startPosX"]), shapes[i]["endPosY"]) // Trouver la première
+            ctx.lineTo(shapes[i]["startPosX"], shapes[i]["startPosY"])
+            ctx.stroke()
+            ctx.closePath() 
+        }
     }
+
 }
 
 function drawRectangle() {
-    
-    // Effacer le canvas et remettre les formes finales
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawCanvasShapes();
-
     // Propriétés du rectangle
     ctx.strokeStyle = "black"
-    ctx.lineWidth = 2;
-    ctx.strokeRect(startX, startY, squareWidth, squareHeight)
+    ctx.strokeRect(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight)
+}
+
+function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle) {
+    // Propriétés du cercle
+    ctx.beginPath();
+    ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
+    ctx.closePath();
+    ctx.stroke();
 }
 
 
-// Création d'un cercle au mouvement : ellipse.js
-
-// Création d'un triangle au mouvement : triangle.js
-
-
-
-
-
-
-
-
-// POUR FAIRE DES CERCLES
-// arc(x, y, rayon, angleInitial, angleFinal, antihoraire)
-// Dessine un arc de cercle qui est centré à la position (x, y), de rayon r, commençant à angleInitial et finissant à angleFinal en allant dans le sens indiqué par antihoraire (par défaut, horaire).
-// Les anglaes sont en radians, pour convertir des degrés en radiants : radians = (Math.PI/180)*degres
-
-    // ctx.beginPath();
-    //     var x = 200; // Coordonnée x
-    //     var y = 300; // Coordonnée y
-    //     var rayon = 200; // Rayon de l'arc
-    //     var angleInitial = 0; // Point de départ sur le cercle
-    //     var angleFinal = Math.PI + (Math.PI * 180) / 2; // Point d'arrivée sur le cercle
-    //      // Horaire ou antihoraire
-    //     var antihoraire = 4 % 2;
-    //     ctx.arc(x, y, rayon, angleInitial, angleFinal, antihoraire);
-    //     ctx.fill();
-    //     ctx.stroke()
-
-
-
-// Change la police global quand on clique dessus
-let encodeSans = document.querySelector('#encode-sans');
-let smoochSans = document.querySelector('#smooch-sans');
-let nunito = document.querySelector('#nunito');
-let defaultFont = document.getElementById("default-font");
-
-encodeSans.addEventListener('click', function(){
-    body.style.fontFamily = "Encode Sans";
-    defaultFont.innerHTML = "Encode Sans";
-    defaultFont.style.fontFamily = "Encode Sans";
-    
-});
-smoochSans.addEventListener('click', function(){
-    body.style.fontFamily = "Smooch Sans";
-    defaultFont.innerHTML = "Smooch Sans";
-    defaultFont.style.fontFamily = "Smooch Sans";
-    
-});
-nunito.addEventListener('click', function(){
-    body.style.fontFamily = "Nunito";
-    defaultFont.innerHTML = "Nunito";
-    defaultFont.style.fontFamily = "Nunito";
-    
-});
+function drawTriangle() {
+    // Propriétés du triangle
+    ctx.beginPath();
+    // point de départ du tracé, donc startX, startY
+    ctx.moveTo(mouseClickPosX, mouseClickPosY)
+    // Point d'arrivé du tracé, ligne tracée de startX, startY vers endX, endY
+    ctx.lineTo(mouseMovingPosX, mouseMovingPosY)
+    ctx.lineTo(mouseClickPosX - (mouseMovingPosX - mouseClickPosX), mouseMovingPosY) // Trouver la première
+    ctx.lineTo(mouseClickPosX, mouseClickPosY)
+    ctx.stroke()
+    ctx.closePath() 
+}

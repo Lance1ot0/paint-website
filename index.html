@@ -41,7 +41,7 @@
             </ul>
 
             <div class="tools-menu">
-                <div class="tools" id="move"></div>
+                <div class="tools" id="moveBtn"></div>
                 <ul class="tools">
                     <li class="shape">
                         <div id="shape-choice">
@@ -50,13 +50,13 @@
                         </div>
                         
                         <ul class="shape-opened">
-                            <li><div><img src="./icones/Ellipse.svg" alt="" id="ellipseBtn">Ellipse</div></li>
-                            <li><div><img src="./icones/Triangle.svg" alt="" id="triangleBtn">Triangle</div></li>
+                            <li id="ellipseBtn"><div><img src="./icones/Ellipse.svg" alt="ellipse" id="ellipseLogo">Ellipse</div></li>
+                            <li id="triangleBtn"><div><img src="./icones/Triangle.svg" alt="triangle" id="triangleLogo">Triangle</div></li>
                         </ul>
                     </li>
                 </ul>
 
-                <div class="tools"><img src="./icones/Text.svg" alt="" id="text"></div>
+                <div class="tools" id="textBtn"><img src="./icones/Text.svg" alt="" id="textLogo"></div>
             </div>
         </nav>
 
@@ -110,8 +110,9 @@
         
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/interface.js"></script>
     <script src="js/color-picker.js"></script>
+    <script src="js/app.js"></script>
     <!-- <script src="js/ellipse.js"></script> -->
     <!-- <script src="js/triangle.js"></script> -->
 </body>
