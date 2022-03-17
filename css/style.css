@@ -7,8 +7,8 @@
 }
 
 body {
-    height: 140vh;
-    width: 150%;
+    /* height: 140vh; */
+    width: 100%;
     background-color: #E0E0E0;
 }
 
@@ -161,7 +161,7 @@ a {
 }
 
 /* Outil rectangle */
-#rectangle {
+#rectangleBtn {
     background: url(../icones/Formes.svg) no-repeat;
     background-size: cover;
     width: 27px;
@@ -169,14 +169,14 @@ a {
 }
 
 /* Outil ellipse */
-#ellipse {
+#ellipseBtn {
     width: 18px;
     height: 18px;
     margin-right: 10px;
 }
 
 /* Outil triangle */
-#triangle {
+#triangleBtn {
     width: 20px;
     height: 18px;
     margin-right: 10px;
@@ -213,11 +213,11 @@ a {
     flex-direction: column;
     position: fixed;
     height: 100%;
-    left: 87.5%;
+    left: calc(100% - 216px);
     row-gap: 100px;
 }
 
-/* / Couleur / */
+/* Couleur */
 .color-property {
     width: 188px;
     height: 312px;
@@ -352,12 +352,12 @@ a {
 }
 
 /* Hover Font Menu*/
-.font-menu #box-font:hover {
+.font-menu {
     border: 1px solid #787C7B;
     box-sizing: border-box;
     border-radius: 2px; 
 }
-#box-font:hover .box-open-font {
+.box-open-font {
     width: 25px;
     height: 25px;
     border: none;
@@ -366,12 +366,13 @@ a {
     display: flex;
     justify-content: center;
 }
-#box-font:hover .box-open-font .arrow-scroll-font {
+.box-open-font .arrow-scroll-font {
     margin-top: 10px;
     width: 11px;
     height: 7px;
     background-color: red;
     background: url(../icones/Arrow-scroll.svg) no-repeat;
+    cursor: pointer;
 }
 
 /* Onclick Font Menu*/
