@@ -1,5 +1,5 @@
 // Sélection du menu file
-let fileToggleMenu = document.querySelector('.file-menu-scroll');
+let fileToggleMenu = document.querySelector('#file-btn, file-arrow');
 
 // Sélection du menu formes
 let shapeToggleMenu = document.querySelector('.shape')
@@ -12,6 +12,9 @@ let fontToggleMenu = document.querySelector(".font-menu")
 
 // Sélection du body
 let body = document.querySelector('body');
+
+let textBtn = document.querySelector('#textBtn');
+let moveBtn = document.querySelector('#moveBtn');
 
 // Attribue une classe spécifique au body lorsque l'on clique sur le menu file et ferme le menu shape s'il est ouvert
 fileToggleMenu.onclick = () => {
@@ -49,6 +52,12 @@ moveBtn.onclick = () => {
     body.classList.remove('open-shape');
     body.classList.remove('open-font')
 }
+
+textBtn.onclick = () => {
+    selectedShape = "text";
+    body.classList.remove('open-file');
+    body.classList.remove('open-shape');
+};
 
 // Change la police globale quand on clique dessus
 let encodeSans = document.querySelector('#encode-sans');

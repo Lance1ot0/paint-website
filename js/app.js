@@ -6,26 +6,19 @@ const ctx = canvas.getContext('2d');
 let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
-let textBtn = document.querySelector('#textBtn');
-let moveBtn = document.querySelector('#moveBtn');
 
-rectangleBtn.onclick = () => {selectedShape = "rectangle"; console.log()};
+rectangleBtn.onclick = () => {selectedShape = "rectangle";};
 ellipseBtn.onclick = () => {selectedShape = "ellipse";};
 triangleBtn.onclick = () => {selectedShape = "triangle";};
-textBtn.onclick = () => {
-    selectedShape = "text";
-    body.classList.remove('open-file');
-    body.classList.remove('open-shape');
-};
 
-// Forme selectioné par l'utilisateur
+// Forme selectioné par l'utilisateur (par défaut c'est un rectangle)
 let selectedShape = "rectangle";
 
 // Liste des propriétés des formes
 let shapes = [];
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page
-const canvasPos = canvas.getBoundingClientRect();
+let canvasPos = canvas.getBoundingClientRect();
 
 // Pour activer ou non le dessin sur le canvas
 let userDrawing = false;
@@ -51,22 +44,46 @@ let mouseMovingPosY = 0;
 let radiusX = 0;
 let radiusY = 0
 
+let clickInterval = null;
+let mouseMoved = false;
+
 
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
+
+    console.log(Date.now());
+    clickInterval = Date.now();
+
+    // Lorsque l'on déssine ferme les onglets
+    body.classList.remove('open-file');
+    body.classList.remove('open-shape');
 
     mouseClickPosX = event.clientX - canvasPos.left;
     mouseClickPosY = event.clientY - canvasPos.top;
 
     userDrawing = true
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
-}
+};
 
 canvas.onmousemove = event => {
+
+    // Récupère les boundings du canvas quand la souris bouge
+    canvasPos = canvas.getBoundingClientRect();
 
     mouseMovingPosX = (event.clientX - canvasPos.left);
     mouseMovingPosY = (event.clientY - canvasPos.top);
 
+    if(Date.now() - clickInterval < 5)
+    {
+        console.log(Date.now() - clickInterval);
+        console.log("trop rapide");
+        userDrawing = false;
+        mouseMoved = false
+    }
+    else
+    {
+        mouseMoved = true;
+    }
     
     if (userDrawing == true) {
 
@@ -79,7 +96,7 @@ canvas.onmousemove = event => {
         {
             squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
             squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
-            drawRectangle();
+            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, "black");
             console.log("width", squareWidth, "height", squareHeight)
         }
 
@@ -93,9 +110,9 @@ canvas.onmousemove = event => {
 
             // Si le rayonX et plus grand que le rayon Y, alors on dessine un cercle de rayonX et inversement
             if (radiusX > radiusY) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, mainChartColor, "black");
             } else if (radiusY > radiusX) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, "black");
             }
             console.log("rayonX", radiusX, "rayonY", radiusY);
         }
@@ -103,7 +120,7 @@ canvas.onmousemove = event => {
         // Si la forme sélectionnée est un triangle
         else if(selectedShape == "triangle")
         {
-            drawTriangle();
+            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, mainChartColor, "black");
         }
 
 
@@ -114,10 +131,68 @@ canvas.onmousemove = event => {
         // }
         
     }
-}
+};
 
 canvas.onmouseout = () => {stopDrawing(event);};
-canvas.onmouseup = () => {stopDrawing(event); console.log(shapes);};
+canvas.onmouseup = () => {
+
+    if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
+    {
+        console.log(Date.now() - clickInterval);
+        console.log("tu as juste clicker");
+        mouseMoved = false;
+        userDrawing = false;
+
+    }
+    else
+    {
+        stopDrawing(event);
+    }
+    
+    
+};
+
+let ctrlKeyPressed = false;
+let zkeyPressed = false;
+let ctrlZpressed = false;
+
+body.onkeydown = event => {
+    if(event.key == "Control")
+    {
+        ctrlKeyPressed = true;
+    }
+
+    if(event.key == "z")
+    {
+        zkeyPressed = true;
+    }
+
+    if(zkeyPressed && ctrlKeyPressed && !ctrlZpressed)
+    {
+        console.log("Ctrl z");
+        ctrlZpressed = true;
+    }
+
+    if(ctrlZpressed)
+    {
+        // Supprimer le dernier déssin
+        undoLastDraw();
+    }
+};
+
+body.onkeyup = event => {
+    if(event.key == "Control")
+    {
+        ctrlKeyPressed = false;
+        ctrlZpressed = false;
+    }
+
+    if(event.key == "z")
+    {
+        zkeyPressed = false;
+        ctrlZpressed = false;
+    }
+};
 
 function stopDrawing(event){
     event.preventDefault();
@@ -142,6 +217,7 @@ function stopDrawing(event){
         {
             shapes.push(
                 {"shape":"ellipse",
+                "color":pickedColor,
                 "centerPosX":mouseClickPosX,
                 "centerPosY":mouseClickPosY,
                 "radiusX":radiusX,
@@ -152,6 +228,7 @@ function stopDrawing(event){
         {
             shapes.push(
                 {"shape":"triangle",
+                "color":pickedColor,
                 "startPosX":mouseClickPosX,
                 "startPosY":mouseClickPosY,
                 "endPosX":mouseMovingPosX,
@@ -173,60 +250,90 @@ function drawCanvasShapes(){
         
         if(shapes[i]["shape"] == "rectangle")
         {
-            ctx.strokeStyle = shapes[i]["color"];
-            ctx.strokeRect(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"]);
+            drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["color"], "black");
         }
         else if(shapes[i]["shape"] == "ellipse")
         {
             if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
-                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"]);
+                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
             } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
-                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"]);
+                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
             }
         }
         else if(shapes[i]["shape"] == "triangle")
         {
-            ctx.beginPath();
-            // point de départ du tracé, donc startX, startY
-            ctx.moveTo(shapes[i]["startPosX"], shapes[i]["startPosY"])
-            // Point d'arrivé du tracé, ligne tracée de startX, startY vers endX, endY
-            ctx.lineTo(shapes[i]["endPosX"], shapes[i]["endPosY"])
-            ctx.lineTo(shapes[i]["startPosX"] - (shapes[i]["endPosX"] - shapes[i]["startPosX"]), shapes[i]["endPosY"]) // Trouver la première
-            ctx.lineTo(shapes[i]["startPosX"], shapes[i]["startPosY"])
-            ctx.stroke()
-            ctx.closePath() 
+            drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["color"], "black")
         }
     }
 
 }
 
+function undoLastDraw(){
+    if(shapes.length > 0)
+    {
+        shapes.pop();
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCanvasShapes();
+}
+
 // Dessiner le rectangle
-function drawRectangle() {
-    // Propriétés du rectangle
-    ctx.strokeStyle = mainChartColor;
-    ctx.strokeRect(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight)
+function drawRectangle(x,y,width,height, bgColor, borderColor) {
+
+    // Dessin du background du rectangle
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(x, y, width, height);
+
+    // Dessin du border du rectangle
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, width, height)
 }
 
 // Dessiner ellipse
-function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle) {
-    // Propriétés du cercle
+function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle, bgColor, borderColor) {
+
+    ctx.fillStyle = bgColor;
     ctx.beginPath();
     ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
     ctx.closePath();
     ctx.stroke();
+
+    // Propriétés du border du cercle
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
+    ctx.closePath();
+    ctx.fill();
 }
 
 // Dessiner triangle
-function drawTriangle() {
+function drawTriangle(startX, endX, startY, endY, bgColor, borderColor) {
+
+    ctx.fillStyle = bgColor;
     // Propriétés du triangle
     ctx.beginPath();
     // point de départ du tracé, donc startX, startY
-    ctx.moveTo(mouseClickPosX, mouseClickPosY)
+    ctx.moveTo(startX, startY)
     // Point d'arrivé du tracé, ligne tracée de startX, startY vers endX, endY
-    ctx.lineTo(mouseMovingPosX, mouseMovingPosY)
-    ctx.lineTo(mouseClickPosX - (mouseMovingPosX - mouseClickPosX), mouseMovingPosY) // Trouver la première
-    ctx.lineTo(mouseClickPosX, mouseClickPosY)
-    ctx.stroke()
+    ctx.lineTo(endX, endY)
+    ctx.lineTo(startX - (endX - startX), endY) // Trouver la première
+    ctx.lineTo(startX, startY)
+    ctx.fill()
     ctx.closePath() 
+
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 2;
+    // Propriétés du triangle
+    ctx.beginPath();
+    // point de départ du tracé, donc startX, startY
+    ctx.moveTo(startX, startY);
+    // Point d'arrivé du tracé, ligne tracée de startX, startY vers endX, endY
+    ctx.lineTo(endX, endY);
+    ctx.lineTo(startX - (endX - startX), endY); // Trouver la première
+    ctx.lineTo(startX, startY);
+    ctx.stroke();
+    ctx.closePath();
 }
 
