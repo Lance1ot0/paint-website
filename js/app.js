@@ -15,6 +15,13 @@ triangleBtn.onclick = () => {selectedShape = "triangle"; mouseSelectionState = f
 let selectedShape = "rectangle";
 let mouseSelectionState = false;
 
+let shapeGrabed = false
+
+let whatShapeIsGrabed = null;
+
+let grabX = 0;
+let grabY = 0;
+
 // Liste des propriétés des formes
 let shapes = [];
 
@@ -52,6 +59,9 @@ let mouseMoved = false;
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
 
+    // Récupère les boundings du canvas quand la souris bouge
+    canvasPos = canvas.getBoundingClientRect();
+
     console.log(Date.now());
     clickInterval = Date.now();
 
@@ -66,8 +76,19 @@ canvas.onmousedown = event => {
     {
         userDrawing = true;
     }
-    
+    else
+    {
+        if(!shapeGrabed)
+        {
+            
+            if(selectedShape == "rectangle")
+            {
+                dragDetectionRectangle();
+            }
+        }
+    }
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
+
 };
 
 canvas.onmousemove = event => {
@@ -90,6 +111,29 @@ canvas.onmousemove = event => {
         else
         {
             mouseMoved = true;
+        }
+    }
+    else
+    {
+        console.log("Souris selector")
+
+        if(shapeGrabed){
+
+            if(selectedShape == "rectangle")
+            {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for(let i = 0; i < shapes.length; i++)
+                {
+                    if(i != whatShapeIsGrabed)
+                    {
+                        drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["color"], "black");
+                    }
+                }
+                shapes[whatShapeIsGrabed]["rect-posX"] = mouseMovingPosX - grabX;
+                shapes[whatShapeIsGrabed]["rect-posY"] = mouseMovingPosY - grabY;
+
+                drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["color"], "black");
+            }
         }
     }
    
@@ -158,50 +202,9 @@ canvas.onmouseup = () => {
     {
         stopDrawing(event);
     }
+
+    shapeGrabed = false;
     
-    
-};
-
-let ctrlKeyPressed = false;
-let zkeyPressed = false;
-let ctrlZpressed = false;
-
-body.onkeydown = event => {
-    if(event.key == "Control")
-    {
-        ctrlKeyPressed = true;
-    }
-
-    if(event.key == "z")
-    {
-        zkeyPressed = true;
-    }
-
-    if(zkeyPressed && ctrlKeyPressed && !ctrlZpressed)
-    {
-        console.log("Ctrl z");
-        ctrlZpressed = true;
-    }
-
-    if(ctrlZpressed)
-    {
-        // Supprimer le dernier déssin
-        undoLastDraw();
-    }
-};
-
-body.onkeyup = event => {
-    if(event.key == "Control")
-    {
-        ctrlKeyPressed = false;
-        ctrlZpressed = false;
-    }
-
-    if(event.key == "z")
-    {
-        zkeyPressed = false;
-        ctrlZpressed = false;
-    }
 };
 
 function stopDrawing(event){
@@ -215,6 +218,15 @@ function stopDrawing(event){
         // Ajoute au tableau un object contenant les propriétés de chaque forme
         if(selectedShape == "rectangle")
         {
+            // Si la width est négative
+            if(squareWidth < 0)
+            {
+                mouseClickPosX += squareWidth;
+                mouseClickPosY += squareHeight;
+                squareWidth = Math.abs(squareWidth);
+                squareHeight =  Math.abs(squareHeight);
+            }
+
             shapes.push(
                 {"shape":"rectangle",
                 "color":pickedColor,
@@ -345,5 +357,26 @@ function drawTriangle(startX, endX, startY, endY, bgColor, borderColor) {
     ctx.lineTo(startX, startY);
     ctx.stroke();
     ctx.closePath();
+}
+
+
+function dragDetectionRectangle(){
+    for (let i = 0; i < shapes.length; i++) {
+
+        xwidth = shapes[i]["rect-posX"] +  shapes[i]["rect-width"];
+        ywidth = shapes[i]["rect-posY"] +  shapes[i]["rect-height"];
+
+        console.log("Objets :" + i);
+
+        if (mouseClickPosX > shapes[i]["rect-posX"] && mouseClickPosX < xwidth && mouseClickPosY > shapes[i]["rect-posY"] && mouseClickPosY < ywidth) 
+        {
+            grabX = mouseClickPosX - shapes[i]["rect-posX"];
+            grabY = mouseClickPosY - shapes[i]["rect-posY"];
+            shapeGrabed = true;
+            whatShapeIsGrabed = i;
+            console.log("Objet selectionnable :" + whatShapeIsGrabed);
+        }
+    }
+    console.log(shapeGrabed);
 }
 
