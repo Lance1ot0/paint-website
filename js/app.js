@@ -212,25 +212,9 @@ function stopDrawing(event){
         // Ajoute au tableau un object contenant les propriétés de chaque forme
         if(selectedShape == "rectangle")
         {
-            // Si la width est négative
-            if(squareWidth < 0 && squareHeight < 0)
-            {
-                mouseClickPosX += squareWidth;
-                mouseClickPosY += squareHeight;
-                squareWidth = Math.abs(squareWidth);
-                squareHeight =  Math.abs(squareHeight);
-            }
-            else if (squareWidth < 0)
-            {
-                mouseClickPosX += squareWidth;
-                squareWidth = Math.abs(squareWidth);
-            }
-            else if (squareHeight < 0)
-            {
-                mouseClickPosY += squareHeight;
-                squareHeight =  Math.abs(squareHeight);
-            }
-
+        
+            alterOriginRectangle();
+            
             shapes.push(
                 {"id":numberOfShapes,
                 "shape":"rectangle",
@@ -397,3 +381,24 @@ function moveRectangle(){
     drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["bgColor"], shapes[whatShapeIsGrabed]["borderColor"]);
 }
 
+
+function alterOriginRectangle(){
+    // Si la width est négative
+    if(squareWidth < 0 && squareHeight < 0)
+    {
+        mouseClickPosX += squareWidth;
+        mouseClickPosY += squareHeight;
+        squareWidth = Math.abs(squareWidth);
+        squareHeight =  Math.abs(squareHeight);
+    }
+    else if (squareWidth < 0)
+    {
+        mouseClickPosX += squareWidth;
+        squareWidth = Math.abs(squareWidth);
+    }
+    else if (squareHeight < 0)
+    {
+        mouseClickPosY += squareHeight;
+        squareHeight =  Math.abs(squareHeight);
+    }
+}
