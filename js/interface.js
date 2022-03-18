@@ -48,15 +48,60 @@ fontToggleMenu.onclick = () => {
 };
 
 moveBtn.onclick = () => {
+    mouseSelectionState = true;
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
     body.classList.remove('open-font')
+    // input.classList.remove('input-active');
+    // input.disabled = true;
 }
 
 textBtn.onclick = () => {
     selectedShape = "text";
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
+};
+
+let ctrlKeyPressed = false;
+let zkeyPressed = false;
+let ctrlZpressed = false;
+
+body.onkeydown = event => {
+    if(event.key == "Control")
+    {
+        ctrlKeyPressed = true;
+    }
+
+    if(event.key == "z")
+    {
+        zkeyPressed = true;
+    }
+
+    if(zkeyPressed && ctrlKeyPressed && !ctrlZpressed)
+    {
+        console.log("Ctrl z");
+        ctrlZpressed = true;
+    }
+
+    if(ctrlZpressed)
+    {
+        // Supprimer le dernier déssin
+        undoLastDraw();
+    }
+};
+
+body.onkeyup = event => {
+    if(event.key == "Control")
+    {
+        ctrlKeyPressed = false;
+        ctrlZpressed = false;
+    }
+
+    if(event.key == "z")
+    {
+        zkeyPressed = false;
+        ctrlZpressed = false;
+    }
 };
 
 // Change la police globale quand on clique dessus

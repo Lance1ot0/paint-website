@@ -6,7 +6,20 @@ const ctxChart = colorChart.getContext('2d');
 const colorRainbow = document.getElementById('color-rainbow');
 const ctxRainbow = colorRainbow.getContext('2d');
 
-const colorSelected = document.getElementById('first-color');
+const bgColorBtn = document.getElementById('first-color');
+const borderColorBtn = document.getElementById('second-color');
+
+let selectedColor = "Back-ground";
+
+bgColorBtn.onclick = () => {
+    selectedColor = "Back-ground";; 
+    bgColorBtn.style.zIndex = 1;
+    borderColorBtn.style.zIndex = 0;};
+borderColorBtn.onclick = () => {
+    selectedColor = "Border";;
+    borderColorBtn.style.zIndex = 1;
+    bgColorBtn.style.zIndex = 0;
+};
 
 // ------ Injecte la taille des canvas dans les variables
 let widthChart = colorChart.width;
@@ -22,6 +35,12 @@ let drag = false;
 
 // ------ Par défaut la couleur est rouge, déclarée en RGBA
 let mainChartColor = 'rgba(255,0,0,1)';
+bgColorBtn.style.backgroundColor = mainChartColor;
+
+let secondChartColor = 'rgba(0,0,0,1)';
+borderColorBtn.style.backgroundColor = secondChartColor;
+
+
 
 ctxChart.rect(0,0,widthChart, heightChart);
 
@@ -57,16 +76,34 @@ function changeColor(e) {
     x = e.offsetX;
     y = e.offsetY;
     let pixelColor = ctxChart.getImageData(x, y, 1, 1).data;
-    mainChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
-    colorSelected.style.backgroundColor = mainChartColor;
+    if(selectedColor == "Back-ground")
+    {
+        mainChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
+        bgColorBtn.style.backgroundColor = mainChartColor;
+    }
+    else if(selectedColor == "Border")
+    {
+        secondChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
+        borderColorBtn.style.backgroundColor = secondChartColor;
+    }
+    
     }
 
     function changeColorBlock(e) {
     x = e.offsetX;
     y = e.offsetY;
     var pixelColor = ctxRainbow.getImageData(x, y, 1, 1).data;
-    mainChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
-    colorSelected.style.backgroundColor = mainChartColor;
+    if(selectedColor == "Back-ground")
+    {
+        mainChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
+        bgColorBtn.style.backgroundColor = mainChartColor;
+    }
+    else if(selectedColor == "Border")
+    {
+        secondChartColor = 'rgba(' + pixelColor[0] + ',' + pixelColor[1] + ',' + pixelColor[2] + ',1)';
+        borderColorBtn.style.backgroundColor = secondChartColor;
+    }
+
     fillGradient();
     }
 
@@ -99,9 +136,16 @@ function mousedown(e) {
 
 
 function fillGradient() {
-    ctxChart.fillStyle = mainChartColor;
+
+    if(selectedColor == "Back-ground")
+    {
+        ctxChart.fillStyle = mainChartColor;
+    }
+    else if(selectedColor == "Border")
+    {
+        ctxChart.fillStyle = secondChartColor; 
+    }
     ctxChart.fillRect(0, 0, widthChart, heightChart);
-    
     let gradientWhite = ctxRainbow.createLinearGradient(0, 0, widthChart, 0);
     gradientWhite.addColorStop(.1, 'rgba(255,255,255,1)');
     gradientWhite.addColorStop(1, 'rgba(255,255,255,0)');
@@ -113,7 +157,9 @@ function fillGradient() {
     gradientBlack.addColorStop(1, 'rgba(0,0,0,1)');
     ctxChart.fillStyle = gradientBlack;
     ctxChart.fillRect(0, 0, widthChart, heightChart);
-    }
+
+
+}
 
 
 

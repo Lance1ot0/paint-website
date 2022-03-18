@@ -7,15 +7,23 @@ let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
 
-rectangleBtn.onclick = () => {selectedShape = "rectangle";};
-ellipseBtn.onclick = () => {selectedShape = "ellipse";};
-triangleBtn.onclick = () => {selectedShape = "triangle";};
+rectangleBtn.onclick = () => {selectedShape = "rectangle"; mouseSelectionState = false;};
+ellipseBtn.onclick = () => {selectedShape = "ellipse"; mouseSelectionState = false;};
+triangleBtn.onclick = () => {selectedShape = "triangle"; mouseSelectionState = false;};
 
 // Forme selectioné par l'utilisateur (par défaut c'est un rectangle)
 let selectedShape = "rectangle";
+let mouseSelectionState = false;
+
+let shapeGrabed = false
+let whatShapeIsGrabed = null;
+
+let grabX = 0;
+let grabY = 0;
 
 // Liste des propriétés des formes
 let shapes = [];
+let numberOfShapes = 0;
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page
 let canvasPos = canvas.getBoundingClientRect();
@@ -51,18 +59,43 @@ let mouseMoved = false;
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
 
-    console.log(Date.now());
+    // Récupère les boundings du canvas quand la souris bouge
+    canvasPos = canvas.getBoundingClientRect();
+
+    // Récupère Date.now pour calculer l'interval de click
     clickInterval = Date.now();
 
-    // Lorsque l'on déssine ferme les onglets
+    // Lorsque l'on touche au canvas ferme les onglets
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
 
+    // Récupère la position de la souris en X et Y
     mouseClickPosX = event.clientX - canvasPos.left;
     mouseClickPosY = event.clientY - canvasPos.top;
 
-    userDrawing = true
+    // Si on est pas en mode selection c'est que l'on peux dessiner
+    if(!mouseSelectionState)
+    {
+        userDrawing = true;
+        whatShapeIsGrabed = null;
+    }
+    else
+    {
+        // Si on a pas de forme déja attrapé
+        if(!shapeGrabed)
+        {
+            for (let i = 0; i < shapes.length; i++) {
+
+                if(shapes[i]["shape"] == "rectangle")
+                {
+                    dragDetectionRectangle(i);
+                }
+            }
+            
+        }
+    }
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
+
 };
 
 canvas.onmousemove = event => {
@@ -73,18 +106,32 @@ canvas.onmousemove = event => {
     mouseMovingPosX = (event.clientX - canvasPos.left);
     mouseMovingPosY = (event.clientY - canvasPos.top);
 
-    if(Date.now() - clickInterval < 5)
+    if(mouseSelectionState)
     {
-        console.log(Date.now() - clickInterval);
-        console.log("trop rapide");
-        userDrawing = false;
-        mouseMoved = false
+        console.log("Souris selector")
+        if(shapeGrabed){
+
+            if(shapes[whatShapeIsGrabed]["shape"] == "rectangle")
+            {
+                moveRectangle();
+            }
+        }
     }
     else
     {
-        mouseMoved = true;
+        if(Date.now() - clickInterval < 6)
+        {
+            console.log(Date.now() - clickInterval);
+            console.log("trop rapide");
+            userDrawing = false;
+            mouseMoved = false
+        }
+        else
+        {
+            mouseMoved = true;
+        }
     }
-    
+   
     if (userDrawing == true) {
 
         // Effacer le canvas et remettre les formes finales
@@ -96,8 +143,7 @@ canvas.onmousemove = event => {
         {
             squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
             squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
-            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, "black");
-            console.log("width", squareWidth, "height", squareHeight)
+            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, secondChartColor);
         }
 
         // Si la forme sélectionnée est une ellipse
@@ -110,25 +156,17 @@ canvas.onmousemove = event => {
 
             // Si le rayonX et plus grand que le rayon Y, alors on dessine un cercle de rayonX et inversement
             if (radiusX > radiusY) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, mainChartColor, "black");
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, mainChartColor, secondChartColor);
             } else if (radiusY > radiusX) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, "black");
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, secondChartColor);
             }
-            console.log("rayonX", radiusX, "rayonY", radiusY);
         }
 
         // Si la forme sélectionnée est un triangle
         else if(selectedShape == "triangle")
         {
-            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, mainChartColor, "black");
+            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, mainChartColor, secondChartColor);
         }
-
-
-        // Si la forme est un texte
-        // else if(selectedShape == "text")
-        // {
-        //     ctx.fillText('Hello world', 100, 259);
-        // }
         
     }
 };
@@ -136,61 +174,29 @@ canvas.onmousemove = event => {
 canvas.onmouseout = () => {stopDrawing(event);};
 canvas.onmouseup = () => {
 
-    if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
+    if(!mouseSelectionState)
     {
-        console.log(Date.now() - clickInterval);
-        console.log("tu as juste clicker");
-        mouseMoved = false;
-        userDrawing = false;
-
-    }
-    else
-    {
-        stopDrawing(event);
-    }
-    
-    
-};
-
-let ctrlKeyPressed = false;
-let zkeyPressed = false;
-let ctrlZpressed = false;
-
-body.onkeydown = event => {
-    if(event.key == "Control")
-    {
-        ctrlKeyPressed = true;
+        // Vérfie si la souris a bougé depuis le dernier click pour le dessin
+        if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
+        {
+            console.log("tu as juste clicker");
+            mouseMoved = false;
+            userDrawing = false;
+        }
+        else
+        {
+            stopDrawing(event);
+            // Incrémente le nombre de formes qui on été créer en tout
+            numberOfShapes++;
+            console.log(shapes);
+        }
     }
 
-    if(event.key == "z")
+    if(shapeGrabed)
     {
-        zkeyPressed = true;
-    }
-
-    if(zkeyPressed && ctrlKeyPressed && !ctrlZpressed)
-    {
-        console.log("Ctrl z");
-        ctrlZpressed = true;
-    }
-
-    if(ctrlZpressed)
-    {
-        // Supprimer le dernier déssin
-        undoLastDraw();
-    }
-};
-
-body.onkeyup = event => {
-    if(event.key == "Control")
-    {
-        ctrlKeyPressed = false;
-        ctrlZpressed = false;
-    }
-
-    if(event.key == "z")
-    {
-        zkeyPressed = false;
-        ctrlZpressed = false;
+        let lastShapeGrabed = shapes.splice(whatShapeIsGrabed,1);
+        shapes.push(lastShapeGrabed[0]);
+        shapeGrabed = false;
     }
 };
 
@@ -200,14 +206,20 @@ function stopDrawing(event){
 
     if(userDrawing)
     {
-        let pickedColor = mainChartColor;
+        let pickedBgColor = mainChartColor;
+        let pickedBorderColor = secondChartColor;
     
         // Ajoute au tableau un object contenant les propriétés de chaque forme
         if(selectedShape == "rectangle")
         {
+        
+            alterOriginRectangle();
+            
             shapes.push(
-                {"shape":"rectangle",
-                "color":pickedColor,
+                {"id":numberOfShapes,
+                "shape":"rectangle",
+                "bgColor":pickedBgColor,
+                "borderColor":pickedBorderColor,
                 "rect-posX":mouseClickPosX,
                 "rect-posY":mouseClickPosY,
                 "rect-width":squareWidth,
@@ -216,8 +228,10 @@ function stopDrawing(event){
         else if(selectedShape == "ellipse")
         {
             shapes.push(
-                {"shape":"ellipse",
-                "color":pickedColor,
+                {"id":numberOfShapes,
+                "shape":"ellipse",
+                "bgColor":pickedBgColor,
+                "borderColor":pickedBorderColor,
                 "centerPosX":mouseClickPosX,
                 "centerPosY":mouseClickPosY,
                 "radiusX":radiusX,
@@ -227,16 +241,16 @@ function stopDrawing(event){
         else if(selectedShape == "triangle")
         {
             shapes.push(
-                {"shape":"triangle",
-                "color":pickedColor,
+                {"id":numberOfShapes,
+                "shape":"triangle",
+                "bgColor":pickedBgColor,
+                "borderColor":pickedBorderColor,
                 "startPosX":mouseClickPosX,
                 "startPosY":mouseClickPosY,
                 "endPosX":mouseMovingPosX,
                 "endPosY":mouseMovingPosY});
         }
     }
-
-    console.log(shapes);
     userDrawing = false;
 }
 
@@ -248,33 +262,38 @@ function drawCanvasShapes(){
     for(let i = 0; i < shapes.length; i++)
     {
         
-        if(shapes[i]["shape"] == "rectangle")
+        if(i !=  whatShapeIsGrabed)
         {
-            drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["color"], "black");
-        }
-        else if(shapes[i]["shape"] == "ellipse")
-        {
-            if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
-                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
-            } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
-                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
+            if(shapes[i]["shape"] == "rectangle")
+            {
+                drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
             }
-        }
-        else if(shapes[i]["shape"] == "triangle")
-        {
-            drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["color"], "black")
+            else if(shapes[i]["shape"] == "ellipse")
+            {
+                if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                }
+            }
+            else if(shapes[i]["shape"] == "triangle")
+            {
+                drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+            }
         }
     }
 
 }
 
 function undoLastDraw(){
+    whatShapeIsGrabed = null;
     if(shapes.length > 0)
     {
         shapes.pop();
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCanvasShapes();
+    console.log(shapes);
 }
 
 // Dessiner le rectangle
@@ -297,15 +316,15 @@ function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle, bgCol
     ctx.beginPath();
     ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
     ctx.closePath();
-    ctx.stroke();
+    ctx.fill();
 
     // Propriétés du border du cercle
     ctx.strokeStyle = borderColor;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
     ctx.closePath();
-    ctx.fill();
+    ctx.stroke();
 }
 
 // Dessiner triangle
@@ -335,4 +354,49 @@ function drawTriangle(startX, endX, startY, endY, bgColor, borderColor) {
     ctx.lineTo(startX, startY);
     ctx.stroke();
     ctx.closePath();
+}
+
+function dragDetectionRectangle(i){
+
+    xwidth = shapes[i]["rect-posX"] +  shapes[i]["rect-width"];
+    ywidth = shapes[i]["rect-posY"] +  shapes[i]["rect-height"];
+
+    if (mouseClickPosX > shapes[i]["rect-posX"] && mouseClickPosX < xwidth && mouseClickPosY > shapes[i]["rect-posY"] && mouseClickPosY < ywidth) 
+    {
+        grabX = mouseClickPosX - shapes[i]["rect-posX"];
+        grabY = mouseClickPosY - shapes[i]["rect-posY"];
+        shapeGrabed = true;
+        whatShapeIsGrabed = i;
+    }
+}
+
+function moveRectangle(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawCanvasShapes()
+    shapes[whatShapeIsGrabed]["rect-posX"] = mouseMovingPosX - grabX;
+    shapes[whatShapeIsGrabed]["rect-posY"] = mouseMovingPosY - grabY;
+
+    drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["bgColor"], shapes[whatShapeIsGrabed]["borderColor"]);
+}
+
+function alterOriginRectangle(){
+    // Si la width est négative
+    if(squareWidth < 0 && squareHeight < 0)
+    {
+        mouseClickPosX += squareWidth;
+        mouseClickPosY += squareHeight;
+        squareWidth = Math.abs(squareWidth);
+        squareHeight =  Math.abs(squareHeight);
+    }
+    else if (squareWidth < 0)
+    {
+        mouseClickPosX += squareWidth;
+        squareWidth = Math.abs(squareWidth);
+    }
+    else if (squareHeight < 0)
+    {
+        mouseClickPosY += squareHeight;
+        squareHeight =  Math.abs(squareHeight);
+    }
 }
