@@ -336,4 +336,3 @@ function drawTriangle(startX, endX, startY, endY, bgColor, borderColor) {
     ctx.stroke();
     ctx.closePath();
 }
-
