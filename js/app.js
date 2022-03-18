@@ -136,6 +136,7 @@ canvas.onmousemove = event => {
 canvas.onmouseout = () => {stopDrawing(event);};
 canvas.onmouseup = () => {
 
+    // Vérfie si la souris a bougé depuis le dernier click
     if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
     {
         console.log(Date.now() - clickInterval);
