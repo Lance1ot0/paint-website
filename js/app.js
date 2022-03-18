@@ -24,6 +24,7 @@ let grabY = 0;
 
 // Liste des propriétés des formes
 let shapes = [];
+let numberOfShapes = 0;
 
 // Récupération du décalage du canvas en x et y par rapport aux margins de la page
 let canvasPos = canvas.getBoundingClientRect();
@@ -62,7 +63,7 @@ canvas.onmousedown = event => {
     // Récupère les boundings du canvas quand la souris bouge
     canvasPos = canvas.getBoundingClientRect();
 
-    console.log(Date.now());
+
     clickInterval = Date.now();
 
     // Lorsque l'on déssine ferme les onglets
@@ -80,14 +81,18 @@ canvas.onmousedown = event => {
     {
         if(!shapeGrabed)
         {
-            
-            if(selectedShape == "rectangle")
-            {
-                dragDetectionRectangle();
+            for (let i = 0; i < shapes.length; i++) {
+
+                if(shapes[i]["shape"] == "rectangle")
+                {
+                    dragDetectionRectangle(i);
+                }
             }
+            
         }
     }
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
+    console.log(shapes);
 
 };
 
@@ -119,14 +124,29 @@ canvas.onmousemove = event => {
 
         if(shapeGrabed){
 
-            if(selectedShape == "rectangle")
+            if(shapes[whatShapeIsGrabed]["shape"] == "rectangle")
             {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 for(let i = 0; i < shapes.length; i++)
                 {
                     if(i != whatShapeIsGrabed)
                     {
-                        drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["color"], "black");
+                        if(shapes[i]["shape"] == "rectangle")
+                        {
+                            drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["color"], "black");
+                        }
+                        else if(shapes[i]["shape"] == "ellipse")
+                        {
+                            if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
+                                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
+                            } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
+                                drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["color"], "black");
+                            }
+                        }
+                        else if(shapes[i]["shape"] == "triangle")
+                        {
+                            drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["color"], "black");
+                        }
                     }
                 }
                 shapes[whatShapeIsGrabed]["rect-posX"] = mouseMovingPosX - grabX;
@@ -150,7 +170,6 @@ canvas.onmousemove = event => {
             squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
             squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
             drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, "black");
-            console.log("width", squareWidth, "height", squareHeight)
         }
 
         // Si la forme sélectionnée est une ellipse
@@ -167,7 +186,6 @@ canvas.onmousemove = event => {
             } else if (radiusY > radiusX) {
                 drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, "black");
             }
-            console.log("rayonX", radiusX, "rayonY", radiusY);
         }
 
         // Si la forme sélectionnée est un triangle
@@ -189,21 +207,32 @@ canvas.onmousemove = event => {
 canvas.onmouseout = () => {stopDrawing(event);};
 canvas.onmouseup = () => {
 
-    // Vérfie si la souris a bougé depuis le dernier click
-    if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
+    if(!mouseSelectionState)
     {
-        console.log(Date.now() - clickInterval);
-        console.log("tu as juste clicker");
-        mouseMoved = false;
-        userDrawing = false;
+        // Vérfie si la souris a bougé depuis le dernier click pour le dessin
+        if(!mouseMoved || (mouseClickPosX == mouseMovingPosX && mouseClickPosY == mouseMovingPosY))
+        {
+            console.log("tu as juste clicker");
+            mouseMoved = false;
+            userDrawing = false;
 
+        }
+        else
+        {
+            stopDrawing(event);
+            // Incrémente le nombre de formes qui on été créer en tout
+            numberOfShapes++;
+        }
     }
-    else
+    if(shapeGrabed)
     {
-        stopDrawing(event);
+        let lastShapeGrabed = shapes.splice(whatShapeIsGrabed,1);
+        shapes.push(lastShapeGrabed[0]);
+        shapeGrabed = false;
     }
+    
 
-    shapeGrabed = false;
+    
     
 };
 
@@ -219,16 +248,27 @@ function stopDrawing(event){
         if(selectedShape == "rectangle")
         {
             // Si la width est négative
-            if(squareWidth < 0)
+            if(squareWidth < 0 && squareHeight < 0)
             {
                 mouseClickPosX += squareWidth;
                 mouseClickPosY += squareHeight;
                 squareWidth = Math.abs(squareWidth);
                 squareHeight =  Math.abs(squareHeight);
             }
+            else if (squareWidth < 0)
+            {
+                mouseClickPosX += squareWidth;
+                squareWidth = Math.abs(squareWidth);
+            }
+            else if (squareHeight < 0)
+            {
+                mouseClickPosY += squareHeight;
+                squareHeight =  Math.abs(squareHeight);
+            }
 
             shapes.push(
-                {"shape":"rectangle",
+                {"id":numberOfShapes,
+                "shape":"rectangle",
                 "color":pickedColor,
                 "rect-posX":mouseClickPosX,
                 "rect-posY":mouseClickPosY,
@@ -238,7 +278,8 @@ function stopDrawing(event){
         else if(selectedShape == "ellipse")
         {
             shapes.push(
-                {"shape":"ellipse",
+                {"id":numberOfShapes,
+                "shape":"ellipse",
                 "color":pickedColor,
                 "centerPosX":mouseClickPosX,
                 "centerPosY":mouseClickPosY,
@@ -249,7 +290,8 @@ function stopDrawing(event){
         else if(selectedShape == "triangle")
         {
             shapes.push(
-                {"shape":"triangle",
+                {"id":numberOfShapes,
+                "shape":"triangle",
                 "color":pickedColor,
                 "startPosX":mouseClickPosX,
                 "startPosY":mouseClickPosY,
@@ -258,7 +300,6 @@ function stopDrawing(event){
         }
     }
 
-    console.log(shapes);
     userDrawing = false;
 }
 
@@ -284,7 +325,7 @@ function drawCanvasShapes(){
         }
         else if(shapes[i]["shape"] == "triangle")
         {
-            drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["color"], "black")
+            drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["color"], "black");
         }
     }
 
@@ -323,7 +364,7 @@ function drawEllipse(centerPosX, centerPosY, radius, startAngle, endAngle, bgCol
 
     // Propriétés du border du cercle
     ctx.strokeStyle = borderColor;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(centerPosX, centerPosY, radius, startAngle, endAngle)
     ctx.closePath();
@@ -360,23 +401,17 @@ function drawTriangle(startX, endX, startY, endY, bgColor, borderColor) {
 }
 
 
-function dragDetectionRectangle(){
-    for (let i = 0; i < shapes.length; i++) {
+function dragDetectionRectangle(i){
 
-        xwidth = shapes[i]["rect-posX"] +  shapes[i]["rect-width"];
-        ywidth = shapes[i]["rect-posY"] +  shapes[i]["rect-height"];
+    xwidth = shapes[i]["rect-posX"] +  shapes[i]["rect-width"];
+    ywidth = shapes[i]["rect-posY"] +  shapes[i]["rect-height"];
 
-        console.log("Objets :" + i);
-
-        if (mouseClickPosX > shapes[i]["rect-posX"] && mouseClickPosX < xwidth && mouseClickPosY > shapes[i]["rect-posY"] && mouseClickPosY < ywidth) 
-        {
-            grabX = mouseClickPosX - shapes[i]["rect-posX"];
-            grabY = mouseClickPosY - shapes[i]["rect-posY"];
-            shapeGrabed = true;
-            whatShapeIsGrabed = i;
-            console.log("Objet selectionnable :" + whatShapeIsGrabed);
-        }
+    if (mouseClickPosX > shapes[i]["rect-posX"] && mouseClickPosX < xwidth && mouseClickPosY > shapes[i]["rect-posY"] && mouseClickPosY < ywidth) 
+    {
+        grabX = mouseClickPosX - shapes[i]["rect-posX"];
+        grabY = mouseClickPosY - shapes[i]["rect-posY"];
+        shapeGrabed = true;
+        whatShapeIsGrabed = i;
     }
-    console.log(shapeGrabed);
 }
 
