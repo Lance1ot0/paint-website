@@ -7,12 +7,13 @@ let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
 
-rectangleBtn.onclick = () => {selectedShape = "rectangle";};
-ellipseBtn.onclick = () => {selectedShape = "ellipse";};
-triangleBtn.onclick = () => {selectedShape = "triangle";};
+rectangleBtn.onclick = () => {selectedShape = "rectangle"; mouseSelectionState = false;};
+ellipseBtn.onclick = () => {selectedShape = "ellipse"; mouseSelectionState = false;};
+triangleBtn.onclick = () => {selectedShape = "triangle"; mouseSelectionState = false;};
 
 // Forme selectioné par l'utilisateur (par défaut c'est un rectangle)
 let selectedShape = "rectangle";
+let mouseSelectionState = false;
 
 // Liste des propriétés des formes
 let shapes = [];
@@ -61,7 +62,11 @@ canvas.onmousedown = event => {
     mouseClickPosX = event.clientX - canvasPos.left;
     mouseClickPosY = event.clientY - canvasPos.top;
 
-    userDrawing = true
+    if(!mouseSelectionState)
+    {
+        userDrawing = true;
+    }
+    
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
 };
 
@@ -73,17 +78,21 @@ canvas.onmousemove = event => {
     mouseMovingPosX = (event.clientX - canvasPos.left);
     mouseMovingPosY = (event.clientY - canvasPos.top);
 
-    if(Date.now() - clickInterval < 5)
+    if(!mouseSelectionState)
     {
-        console.log(Date.now() - clickInterval);
-        console.log("trop rapide");
-        userDrawing = false;
-        mouseMoved = false
+        if(Date.now() - clickInterval < 5)
+        {
+            console.log(Date.now() - clickInterval);
+            console.log("trop rapide");
+            userDrawing = false;
+            mouseMoved = false
+        }
+        else
+        {
+            mouseMoved = true;
+        }
     }
-    else
-    {
-        mouseMoved = true;
-    }
+   
     
     if (userDrawing == true) {
 

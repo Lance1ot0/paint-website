@@ -48,6 +48,7 @@ fontToggleMenu.onclick = () => {
 };
 
 moveBtn.onclick = () => {
+    mouseSelectionState = true;
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
     body.classList.remove('open-font')
