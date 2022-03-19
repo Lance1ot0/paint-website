@@ -7,13 +7,46 @@ let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
 
-rectangleBtn.onclick = () => {selectedShape = "rectangle"; mouseSelectionState = false;};
-ellipseBtn.onclick = () => {selectedShape = "ellipse"; mouseSelectionState = false;};
-triangleBtn.onclick = () => {selectedShape = "triangle"; mouseSelectionState = false;};
+// Sélection le input en HTML pour ensuite pouvoir l'activer/désactiver
+let input = document.querySelector('.text-input');
+
+// Variable pour le texte qui sera écrit en input
+let writtenText = null;
+
+rectangleBtn.onclick = () => {
+    selectedShape = "rectangle"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
+
+ellipseBtn.onclick = () => {
+    selectedShape = "ellipse"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
+triangleBtn.onclick = () => {
+    selectedShape = "triangle"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input}
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
 
 // Forme selectioné par l'utilisateur (par défaut c'est un rectangle)
 let selectedShape = "rectangle";
 let mouseSelectionState = false;
+
+let textSelectionState = false;
 
 let shapeGrabed = false
 let whatShapeIsGrabed = null;
@@ -59,6 +92,8 @@ let mouseMoved = false;
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
 
+    console.log("Text selection state", textSelectionState);
+
     // Récupère les boundings du canvas quand la souris bouge
     canvasPos = canvas.getBoundingClientRect();
 
@@ -74,12 +109,12 @@ canvas.onmousedown = event => {
     mouseClickPosY = event.clientY - canvasPos.top;
 
     // Si on est pas en mode selection c'est que l'on peux dessiner
-    if(!mouseSelectionState)
+    if(!mouseSelectionState && !textSelectionState)
     {
         userDrawing = true;
         whatShapeIsGrabed = null;
     }
-    else
+    else if(mouseSelectionState && !textSelectionState)
     {
         // Si on a pas de forme déja attrapé
         if(!shapeGrabed)
@@ -90,6 +125,28 @@ canvas.onmousedown = event => {
                 {
                     dragDetectionRectangle(i);
                 }
+            }
+            
+        }
+    }
+
+    else if(textSelectionState && !mouseSelectionState)
+    {
+        writtenText = document.querySelector('#write-text').value;
+        console.log("Texte écrit par U : '", writtenText,"'");
+        if(writtenText != "")
+        {
+            // Attribut par défaut la police Encode Sans
+            ctx.font = "48px Encode Sans"
+            console.log( ctx.font);
+
+            if(!highlightChecked)
+            {
+                writeText(writtenText, mouseClickPosX, mouseClickPosY, secondChartColor, true);
+            }
+            else
+            {
+                textBackground(writtenText, mouseClickPosX, mouseClickPosY, mainChartColor, secondChartColor, true);
             }
             
         }
@@ -143,7 +200,7 @@ canvas.onmousemove = event => {
         {
             squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
             squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
-            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, secondChartColor);
+            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, secondChartColor, mainChartColor);
         }
 
         // Si la forme sélectionnée est une ellipse
@@ -156,16 +213,16 @@ canvas.onmousemove = event => {
 
             // Si le rayonX et plus grand que le rayon Y, alors on dessine un cercle de rayonX et inversement
             if (radiusX > radiusY) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, mainChartColor, secondChartColor);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, secondChartColor, mainChartColor);
             } else if (radiusY > radiusX) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, secondChartColor);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, secondChartColor, mainChartColor);
             }
         }
 
         // Si la forme sélectionnée est un triangle
         else if(selectedShape == "triangle")
         {
-            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, mainChartColor, secondChartColor);
+            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, secondChartColor, mainChartColor);
         }
         
     }
@@ -266,19 +323,27 @@ function drawCanvasShapes(){
         {
             if(shapes[i]["shape"] == "rectangle")
             {
-                drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"],shapes[i]["borderColor"], shapes[i]["bgColor"]);
             }
             else if(shapes[i]["shape"] == "ellipse")
             {
                 if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
-                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
                 } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
-                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
                 }
             }
             else if(shapes[i]["shape"] == "triangle")
             {
-                drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
+            }
+            else if(shapes[i]["shape"] == "textwithoutBg")
+            {
+                writeText(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["fontColor"], false);
+            }
+            else if(shapes[i]["shape"] == "textAndBg")
+            {
+                textBackground(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["backgroundColor"], shapes[i]["fontColor"], false);
             }
         }
     }
@@ -377,7 +442,7 @@ function moveRectangle(){
     shapes[whatShapeIsGrabed]["rect-posX"] = mouseMovingPosX - grabX;
     shapes[whatShapeIsGrabed]["rect-posY"] = mouseMovingPosY - grabY;
 
-    drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["bgColor"], shapes[whatShapeIsGrabed]["borderColor"]);
+    drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["borderColor"], shapes[whatShapeIsGrabed]["bgColor"]);
 }
 
 function alterOriginRectangle(){
@@ -399,4 +464,91 @@ function alterOriginRectangle(){
         mouseClickPosY += squareHeight;
         squareHeight =  Math.abs(squareHeight);
     }
+}
+
+
+
+
+// Ecrire un texte
+function writeText(text, clickX, clickY, fontColor, firstWriting) {
+
+    // Récupère la selection de l'utilisateur
+    if(firstWriting)
+    {
+        font = choosenFont();
+    }
+
+    let selectedFont = ctx.font;
+   
+
+    // Couleur du texte
+    ctx.fillStyle = fontColor;
+    // Afficher le texte sur la page à la position de la souris
+    ctx.fillText(text, clickX, clickY);
+
+    if(firstWriting)
+    {
+        shapes.push(
+            {"shape": "textwithoutBg",
+            "fontColor": fontColor,
+            "text": text,
+            "clickX": clickX, 
+            "clickY": clickY,
+            "font": selectedFont
+        });
+        console.log(shapes);
+    }
+    
+
+    
+    
+}
+
+// Choix de la police
+let font = null;
+
+function choosenFont() {
+    // Changer la police selon celle choisie
+    let choosenFontNunito = body.classList.contains('nunito');
+    let choosenFontSmoochSans = body.classList.contains('smooch-sans');
+    let choosenFontEncodeSans = body.classList.contains('encode-sans');
+    if (choosenFontNunito) {
+        ctx.font = "48px Nunito"
+        return "Nunito"
+    } else if (choosenFontSmoochSans) {
+        ctx.font = "48px Smooch Sans"
+        return "Smooch Sans"
+    } else if (choosenFontEncodeSans) {
+        ctx.font = "48px Encode Sans"
+        return "Encode Sans"
+    }
+}
+
+function textBackground(text, clickX, clickY, backgroundColor, fontColor, firstWriting) {
+
+    // Départ du texte
+    ctx.textBaseline = "top";
+    // Couleur du surlignage
+    ctx.fillStyle = backgroundColor;
+    // Taille du texte
+    let textWidth = ctx.measureText(text).width;
+    console.log(textWidth);
+    // Création du surlignage selon la taille du texte
+    ctx.fillRect(clickX, clickY, textWidth, 48);
+    writeText(text, clickX, clickY, fontColor, false);
+
+    if(firstWriting)
+    {
+        shapes.push(
+            {"shape": "textAndBg",
+            "fontColor": fontColor,
+            "backgroundColor": backgroundColor,
+            "text": text,
+            "clickX": clickX, 
+            "clickY": clickY,
+            "font": ctx.font
+        });
+        console.log(shapes);
+    }
+
 }

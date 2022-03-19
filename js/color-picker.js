@@ -34,7 +34,7 @@ let y = 0;
 let drag = false;
 
 // ------ Par défaut la couleur est rouge, déclarée en RGBA
-let mainChartColor = 'rgba(255,0,0,1)';
+let mainChartColor = 'rgba(255,255,255,1)';
 bgColorBtn.style.backgroundColor = mainChartColor;
 
 let secondChartColor = 'rgba(0,0,0,1)';

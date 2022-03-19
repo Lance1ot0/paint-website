@@ -14,6 +14,9 @@ let fontToggleMenu = document.querySelector(".font-menu")
 let body = document.querySelector('body');
 
 let textBtn = document.querySelector('#textBtn');
+let highlightCheckBox = document.querySelector('#highlight');
+let highlightChecked = false;
+
 let moveBtn = document.querySelector('#moveBtn');
 
 // Attribue une classe spécifique au body lorsque l'on clique sur le menu file et ferme le menu shape s'il est ouvert
@@ -52,14 +55,33 @@ moveBtn.onclick = () => {
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
     body.classList.remove('open-font')
-    // input.classList.remove('input-active');
-    // input.disabled = true;
-}
+    input.classList.remove('input-active');
+    input.disabled = true;
+    textSelectionState = false;
+};
 
 textBtn.onclick = () => {
+    textSelectionState = true;
+    mouseSelectionState = false;
     selectedShape = "text";
     body.classList.remove('open-file');
-    body.classList.remove('open-shape');
+    body.classList.remove('open-shape')
+    // Active le input du texte quand on a choisi l'outil texte
+    input.classList.toggle('input-active');
+    input.disabled = false;
+};
+
+highlightCheckBox.onclick = () => {
+    if(!highlightChecked)
+    {
+        highlightChecked = true;
+        highlightChecked.checked = true;
+    }
+    else
+    {
+        highlightChecked = false;
+        highlightChecked.checked = false;
+    }
 };
 
 let ctrlKeyPressed = false;
@@ -114,14 +136,25 @@ encodeSans.addEventListener('click', function(){
     body.style.fontFamily = "Encode Sans";
     defaultFont.innerHTML = "Encode Sans";
     defaultFont.style.fontFamily = "Encode Sans";
+    body.classList.toggle('encode-sans');
+    body.classList.remove('nunito');
+    body.classList.remove('smooch-sans');
 });
+
 smoochSans.addEventListener('click', function(){
     body.style.fontFamily = "Smooch Sans";
     defaultFont.innerHTML = "Smooch Sans";
     defaultFont.style.fontFamily = "Smooch Sans";
+    body.classList.toggle('smooch-sans');
+    body.classList.remove('nunito');
+    body.classList.remove('encode-sans'); 
 });
+
 nunito.addEventListener('click', function(){
     body.style.fontFamily = "Nunito";
     defaultFont.innerHTML = "Nunito";
     defaultFont.style.fontFamily = "Nunito";
+    body.classList.toggle('nunito');
+    body.classList.remove('smooch-sans');
+    body.classList.remove('encode-sans');
 });
