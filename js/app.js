@@ -7,13 +7,46 @@ let rectangleBtn = document.querySelector('#rectangleBtn');
 let ellipseBtn = document.querySelector('#ellipseBtn');
 let triangleBtn = document.querySelector('#triangleBtn');
 
-rectangleBtn.onclick = () => {selectedShape = "rectangle"; mouseSelectionState = false;};
-ellipseBtn.onclick = () => {selectedShape = "ellipse"; mouseSelectionState = false;};
-triangleBtn.onclick = () => {selectedShape = "triangle"; mouseSelectionState = false;};
+// Sélection le input en HTML pour ensuite pouvoir l'activer/désactiver
+let input = document.querySelector('.text-input');
+
+// Variable pour le texte qui sera écrit en input
+let writtenText = null;
+
+rectangleBtn.onclick = () => {
+    selectedShape = "rectangle"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
+
+ellipseBtn.onclick = () => {
+    selectedShape = "ellipse"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
+triangleBtn.onclick = () => {
+    selectedShape = "triangle"; 
+    mouseSelectionState = false; 
+    textSelectionState = false;
+    // Disabled input}
+    input.classList.remove('input-active');
+    input.disabled = true;
+};
+
 
 // Forme selectioné par l'utilisateur (par défaut c'est un rectangle)
 let selectedShape = "rectangle";
 let mouseSelectionState = false;
+
+let textSelectionState = false;
 
 let shapeGrabed = false
 let whatShapeIsGrabed = null;
@@ -59,6 +92,8 @@ let mouseMoved = false;
 // Créer les eventlistener de la souris 
 canvas.onmousedown = event => {
 
+    console.log("Text selection state", textSelectionState);
+
     // Récupère les boundings du canvas quand la souris bouge
     canvasPos = canvas.getBoundingClientRect();
 
@@ -74,12 +109,12 @@ canvas.onmousedown = event => {
     mouseClickPosY = event.clientY - canvasPos.top;
 
     // Si on est pas en mode selection c'est que l'on peux dessiner
-    if(!mouseSelectionState)
+    if(!mouseSelectionState && !textSelectionState)
     {
         userDrawing = true;
         whatShapeIsGrabed = null;
     }
-    else
+    else if(mouseSelectionState && !textSelectionState)
     {
         // Si on a pas de forme déja attrapé
         if(!shapeGrabed)
@@ -92,6 +127,17 @@ canvas.onmousedown = event => {
                 }
             }
             
+        }
+    }
+
+    else if(textSelectionState && !mouseSelectionState)
+    {
+        writtenText = document.querySelector('#write-text').value;
+        console.log(writtenText);
+        if(writtenText != "")
+        {
+            console.log("il y a du texte")
+            writeText(writtenText, mouseClickPosX, mouseClickPosY, mainChartColor);
         }
     }
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
@@ -401,4 +447,58 @@ function alterOriginRectangle(){
         mouseClickPosY += squareHeight;
         squareHeight =  Math.abs(squareHeight);
     }
+}
+
+
+
+
+// Ecrire un texte
+function writeText(text, clickX, clickY, fontColor) {
+
+    // Attribut par défaut la police Encode Sans
+    ctx.font = "48px Encode Sans"
+
+    // Récupère la selection de l'utilisateur
+    font = choosenFont();
+
+    // Couleur du texte
+    ctx.fillStyle = fontColor;
+    // Afficher le texte sur la page à la position de la souris
+    ctx.fillText(text, clickX, clickY);
+    
+}
+
+// Choix de la police
+let font = null;
+
+function choosenFont() {
+    // Changer la police selon celle choisie
+    let choosenFontNunito = body.classList.contains('nunito');
+    let choosenFontSmoochSans = body.classList.contains('smooch-sans');
+    let choosenFontEncodeSans = body.classList.contains('encode-sans');
+    if (choosenFontNunito) {
+        ctx.font = "48px Nunito"
+        return "Nunito"
+    } else if (choosenFontSmoochSans) {
+        ctx.font = "48px Smooch Sans"
+        return "Smooch Sans"
+    } else if (choosenFontEncodeSans) {
+        ctx.font = "48px Encode Sans"
+        return "Encode Sans"
+    }
+}
+
+function textBackground(text, clickX, clickY, backgroundColor, fontColor) {
+    // Sauvegarde l'état actuel
+    ctx.save();
+    // Départ du texte
+    ctx.textBaseline = "top";
+    // Couleur du surlignage
+    ctx.fillStyle = backgroundColor;
+    // Taille du texte
+    let textWidth = ctx.measureText(text).width;
+    // Création du surlignage selon la taille du texte
+    ctx.fillRect(clickX, clickY, textWidth, 48)
+    writeText(text, clickX, clickY, fontColor)
+    ctx.restore();
 }

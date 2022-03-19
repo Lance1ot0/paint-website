@@ -52,14 +52,20 @@ moveBtn.onclick = () => {
     body.classList.remove('open-file');
     body.classList.remove('open-shape');
     body.classList.remove('open-font')
-    // input.classList.remove('input-active');
-    // input.disabled = true;
-}
+    input.classList.remove('input-active');
+    input.disabled = true;
+    textSelectionState = false;
+};
 
 textBtn.onclick = () => {
+    textSelectionState = true;
+    mouseSelectionState = false;
     selectedShape = "text";
     body.classList.remove('open-file');
-    body.classList.remove('open-shape');
+    body.classList.remove('open-shape')
+    // Active le input du texte quand on a choisi l'outil texte
+    input.classList.toggle('input-active');
+    input.disabled = false;
 };
 
 let ctrlKeyPressed = false;
@@ -114,14 +120,25 @@ encodeSans.addEventListener('click', function(){
     body.style.fontFamily = "Encode Sans";
     defaultFont.innerHTML = "Encode Sans";
     defaultFont.style.fontFamily = "Encode Sans";
+    body.classList.toggle('encode-sans');
+    body.classList.remove('nunito');
+    body.classList.remove('smooch-sans');
 });
+
 smoochSans.addEventListener('click', function(){
     body.style.fontFamily = "Smooch Sans";
     defaultFont.innerHTML = "Smooch Sans";
     defaultFont.style.fontFamily = "Smooch Sans";
+    body.classList.toggle('smooch-sans');
+    body.classList.remove('nunito');
+    body.classList.remove('encode-sans'); 
 });
+
 nunito.addEventListener('click', function(){
     body.style.fontFamily = "Nunito";
     defaultFont.innerHTML = "Nunito";
     defaultFont.style.fontFamily = "Nunito";
+    body.classList.toggle('nunito');
+    body.classList.remove('smooch-sans');
+    body.classList.remove('encode-sans');
 });
