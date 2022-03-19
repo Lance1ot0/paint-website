@@ -133,11 +133,22 @@ canvas.onmousedown = event => {
     else if(textSelectionState && !mouseSelectionState)
     {
         writtenText = document.querySelector('#write-text').value;
-        console.log(writtenText);
+        console.log("Texte écrit par U : '", writtenText,"'");
         if(writtenText != "")
         {
-            console.log("il y a du texte")
-            writeText(writtenText, mouseClickPosX, mouseClickPosY, mainChartColor);
+            // Attribut par défaut la police Encode Sans
+            ctx.font = "48px Encode Sans"
+            console.log( ctx.font);
+
+            if(!highlightChecked)
+            {
+                writeText(writtenText, mouseClickPosX, mouseClickPosY, secondChartColor, true);
+            }
+            else
+            {
+                textBackground(writtenText, mouseClickPosX, mouseClickPosY, mainChartColor, secondChartColor, true);
+            }
+            
         }
     }
     console.log("x", mouseClickPosX, "y", mouseClickPosY);
@@ -189,7 +200,7 @@ canvas.onmousemove = event => {
         {
             squareWidth = (event.clientX - canvasPos.left) - mouseClickPosX;
             squareHeight = (event.clientY - canvasPos.top) - mouseClickPosY;
-            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, mainChartColor, secondChartColor);
+            drawRectangle(mouseClickPosX, mouseClickPosY, squareWidth, squareHeight, secondChartColor, mainChartColor);
         }
 
         // Si la forme sélectionnée est une ellipse
@@ -202,16 +213,16 @@ canvas.onmousemove = event => {
 
             // Si le rayonX et plus grand que le rayon Y, alors on dessine un cercle de rayonX et inversement
             if (radiusX > radiusY) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, mainChartColor, secondChartColor);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusX, startAngle, endAngle, secondChartColor, mainChartColor);
             } else if (radiusY > radiusX) {
-                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, mainChartColor, secondChartColor);
+                drawEllipse(mouseClickPosX, mouseClickPosY, radiusY, startAngle, endAngle, secondChartColor, mainChartColor);
             }
         }
 
         // Si la forme sélectionnée est un triangle
         else if(selectedShape == "triangle")
         {
-            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, mainChartColor, secondChartColor);
+            drawTriangle(mouseClickPosX, mouseMovingPosX, mouseClickPosY, mouseMovingPosY, secondChartColor, mainChartColor);
         }
         
     }
@@ -312,19 +323,27 @@ function drawCanvasShapes(){
         {
             if(shapes[i]["shape"] == "rectangle")
             {
-                drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                drawRectangle(shapes[i]["rect-posX"], shapes[i]["rect-posY"], shapes[i]["rect-width"], shapes[i]["rect-height"],shapes[i]["borderColor"], shapes[i]["bgColor"]);
             }
             else if(shapes[i]["shape"] == "ellipse")
             {
                 if (shapes[i]["radiusX"] > shapes[i]["radiusY"]) {
-                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusX"], startAngle, shapes[i]["endAngle"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
                 } else if (shapes[i]["radiusY"] > shapes[i]["radiusX"]) {
-                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                    drawEllipse(shapes[i]["centerPosX"], shapes[i]["centerPosY"], shapes[i]["radiusY"], startAngle, shapes[i]["endAngle"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
                 }
             }
             else if(shapes[i]["shape"] == "triangle")
             {
-                drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["bgColor"], shapes[i]["borderColor"]);
+                drawTriangle(shapes[i]["startPosX"], shapes[i]["endPosX"], shapes[i]["startPosY"], shapes[i]["endPosY"], shapes[i]["borderColor"], shapes[i]["bgColor"]);
+            }
+            else if(shapes[i]["shape"] == "textwithoutBg")
+            {
+                writeText(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["fontColor"], false);
+            }
+            else if(shapes[i]["shape"] == "textAndBg")
+            {
+                textBackground(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["backgroundColor"], shapes[i]["fontColor"], false);
             }
         }
     }
@@ -424,7 +443,7 @@ function moveRectangle(){
     shapes[whatShapeIsGrabed]["rect-posX"] = mouseMovingPosX - grabX;
     shapes[whatShapeIsGrabed]["rect-posY"] = mouseMovingPosY - grabY;
 
-    drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["bgColor"], shapes[whatShapeIsGrabed]["borderColor"]);
+    drawRectangle(shapes[whatShapeIsGrabed]["rect-posX"], shapes[whatShapeIsGrabed]["rect-posY"], shapes[whatShapeIsGrabed]["rect-width"], shapes[whatShapeIsGrabed]["rect-height"], shapes[whatShapeIsGrabed]["borderColor"], shapes[whatShapeIsGrabed]["bgColor"]);
 }
 
 
@@ -453,18 +472,37 @@ function alterOriginRectangle(){
 
 
 // Ecrire un texte
-function writeText(text, clickX, clickY, fontColor) {
-
-    // Attribut par défaut la police Encode Sans
-    ctx.font = "48px Encode Sans"
+function writeText(text, clickX, clickY, fontColor, firstWriting) {
 
     // Récupère la selection de l'utilisateur
-    font = choosenFont();
+    if(firstWriting)
+    {
+        font = choosenFont();
+    }
+
+    let selectedFont = ctx.font;
+   
 
     // Couleur du texte
     ctx.fillStyle = fontColor;
     // Afficher le texte sur la page à la position de la souris
     ctx.fillText(text, clickX, clickY);
+
+    if(firstWriting)
+    {
+        shapes.push(
+            {"shape": "textwithoutBg",
+            "fontColor": fontColor,
+            "text": text,
+            "clickX": clickX, 
+            "clickY": clickY,
+            "font": selectedFont
+        });
+        console.log(shapes);
+    }
+    
+
+    
     
 }
 
@@ -488,17 +526,31 @@ function choosenFont() {
     }
 }
 
-function textBackground(text, clickX, clickY, backgroundColor, fontColor) {
-    // Sauvegarde l'état actuel
-    ctx.save();
+function textBackground(text, clickX, clickY, backgroundColor, fontColor, firstWriting) {
+
     // Départ du texte
     ctx.textBaseline = "top";
     // Couleur du surlignage
     ctx.fillStyle = backgroundColor;
     // Taille du texte
     let textWidth = ctx.measureText(text).width;
+    console.log(textWidth);
     // Création du surlignage selon la taille du texte
-    ctx.fillRect(clickX, clickY, textWidth, 48)
-    writeText(text, clickX, clickY, fontColor)
-    ctx.restore();
+    ctx.fillRect(clickX, clickY, textWidth, 48);
+    writeText(text, clickX, clickY, fontColor, false);
+
+    if(firstWriting)
+    {
+        shapes.push(
+            {"shape": "textAndBg",
+            "fontColor": fontColor,
+            "backgroundColor": backgroundColor,
+            "text": text,
+            "clickX": clickX, 
+            "clickY": clickY,
+            "font": ctx.font
+        });
+        console.log(shapes);
+    }
+
 }
