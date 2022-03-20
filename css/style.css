@@ -343,23 +343,7 @@ input[type="text"] {
 input[type="text"].input-active {
     background-color: #FFF;
 }
-/* Paragraphe */
-.paragraph {
-    margin-left: 10px;
-    width: 137px;
-    height: 25px;
-    /* background: orange; */
-    display: flex;
-    column-gap: 25px;
-    margin-bottom: 2em;
-    /* justify-content: space-between; */
-}
-#align-left, #align-center, #align-right {
-    width: 29px;
-    height: 25px;
-    border: none;
-    background: transparent;
-}
+
 
 /* Font Menu Scroll */
 .font-menu #default-font {

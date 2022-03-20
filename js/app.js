@@ -20,6 +20,7 @@ rectangleBtn.onclick = () => {
     // Disabled input
     input.classList.remove('input-active');
     input.disabled = true;
+    highlightCheckBox.disabled = true;
 };
 
 
@@ -30,6 +31,7 @@ ellipseBtn.onclick = () => {
     // Disabled input
     input.classList.remove('input-active');
     input.disabled = true;
+    highlightCheckBox.disabled = true;
 };
 
 triangleBtn.onclick = () => {
@@ -39,6 +41,7 @@ triangleBtn.onclick = () => {
     // Disabled input}
     input.classList.remove('input-active');
     input.disabled = true;
+    highlightCheckBox.disabled = true;
 };
 
 
@@ -314,6 +317,8 @@ function stopDrawing(event){
 
 // Redessine toutes les formes sauvegardées sur le canvas
 function drawCanvasShapes(){
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // Parcours le tableau de forme pour les déssiner
 
     for(let i = 0; i < shapes.length; i++)
@@ -370,7 +375,6 @@ function drawRectangle(x,y,width,height, bgColor, borderColor) {
 
     // Dessin du border du rectangle
     ctx.strokeStyle = borderColor;
-    ctx.lineWidth = 2;
     ctx.strokeRect(x, y, width, height)
 }
 
@@ -498,9 +502,6 @@ function writeText(text, clickX, clickY, fontColor, firstWriting) {
         });
         console.log(shapes);
     }
-    
-
-    
     
 }
 

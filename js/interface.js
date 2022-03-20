@@ -57,10 +57,12 @@ moveBtn.onclick = () => {
     body.classList.remove('open-font')
     input.classList.remove('input-active');
     input.disabled = true;
+    highlightCheckBox.disabled = true;
     textSelectionState = false;
 };
 
 textBtn.onclick = () => {
+    highlightCheckBox.disabled = false;
     textSelectionState = true;
     mouseSelectionState = false;
     selectedShape = "text";
@@ -158,3 +160,18 @@ nunito.addEventListener('click', function(){
     body.classList.remove('smooch-sans');
     body.classList.remove('encode-sans');
 });
+
+
+const btnDownload = document.getElementById('JPEG-Btn')
+
+btnDownload.addEventListener("click", function() {
+
+    const link = document.createElement('a');
+    document.body.appendChild(link)
+    link.href = canvas.toDataURL();
+    link.download = "draw" + ".jpeg";
+    link.click();
+    document.body.removeChild(link)
+    const dataURI = canvas.toDataURL("image/jpeg");
+
+})
