@@ -352,12 +352,12 @@ input[type="text"].input-active {
     background-color: #FFF;
 }
 
-/* Font Menu Scroll */
+/* Font Menu déroulant */
 .font-menu #default-font {
     padding-left: 10px;
 }
 
-/* Default Font Menu*/
+/* Affichage de la Font Menu*/
 .font-menu #box-font {
     height: 25px;
     border: 1px solid #787C7B;
@@ -367,6 +367,8 @@ input[type="text"].input-active {
     align-items: center;
     justify-content: space-between;
 }
+
+/* Ouverture du menu déroulant font */
 #box-font .box-open-font {
     width: 25px;
     height: 25px;
@@ -439,7 +441,7 @@ input[type="text"].input-active {
     background: url(../icones/Arrow-scroll.svg) no-repeat;
 }
 
-/* Affiche un apercçu de la vrai police indiquée */
+/* Affiche un aperçu de la police sélectionnée */
 #encode-Sans {
     font-family: 'Encode Sans';
     font-weight: 500;
