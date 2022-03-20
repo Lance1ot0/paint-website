@@ -10,6 +10,7 @@
 ## Sommaire
 
 - [Le projet](#le-projet)
+- [Installation du projet](#installation-du-projet)
 - [Technologies utilisées](#technologies-utilisées)
 - [Fonctionnalités du site](#fonctionnalités-du-site)
 - [Enregistrement](#enregistrement)
@@ -25,6 +26,8 @@
 ![image](https://user-images.githubusercontent.com/95865130/159140774-68d3d123-6b6d-45a9-8a60-63e1461ebe0b.png)
 <i>Aperçu du site</i>
 
+### Installation du projet
+Pour lancer le projet, il faut placer le dossier "Shape 4U" dans le répertoire htdocs de mamp. Vous pouvez ensuite lancer mamp, puis dans le navigateur il faut indiquer ce chemin : http://localhost/Shape4/index.html
 
 ### Technologies utilisées
 #### Frontend
