@@ -1,3 +1,4 @@
+/* Initialisation de la page */
 * {
     margin: 0;
     padding: 0;
@@ -12,6 +13,7 @@ body {
     background-color: #E0E0E0;
 }
 
+/* Navbar */
 .navbar {
     background: #1F1F1F;
     height: 50px;
@@ -47,7 +49,7 @@ a {
     font-weight: 500;
     font-size: 0.875em;
 }
-
+/* Quand on ouvre le File Menu */
 .menu-opened a  {
     display: flex;
     font-weight: 200;
@@ -63,8 +65,8 @@ a {
     width: 10px;
 }
 
-/* N'affiche pas les List Item (li) de la liste mère menu-opened et du menu tool opened */
-.menu-opened, .shape-opened, .export-file, .font-opened, .saving-tab{
+/* N'affiche pas les List Item (li) de la liste mère */
+.menu-opened, .shape-opened, .export-file, .font-opened {
     display: none; 
 }
 
@@ -88,9 +90,8 @@ a {
     border-radius: 1px;
 }
 
-
-/* Ouvrir le menu export au survol */
-.open-export .export-file, .open-save .saving-tab{
+/* Ouvrir le menu export ou le menu save au survol */
+.open-export .export-file {
     background-color: #141414;
     width: 108px;
 
@@ -111,22 +112,17 @@ a {
 
 }
 
-.open-save .saving-tab {
-    width: 208px;
-}
-
-/* Descendre la flèche quand hover */
+/* Descendre la flèche au survol */
 .open-file .file-menu-scroll #arrow-scroll { 
     margin-top: 6px;
 }
 
-
-/* Change la couleur de fond des liens des menus en hover */
+/* Change la couleur de fond des liens des menus au survol */
 .menu-opened a:hover, .shape-opened li:hover, .font-opened a:hover {
     background-color: #133346;
 }
 
-/* Menu des tools*/
+/* Menu des outils */
 .tools-menu {
     width: 210px;
     display: flex;
@@ -137,6 +133,7 @@ a {
 
 }
 
+/* Affichage des formes dans le menu */
 #shape-choice {
     display: flex;
     column-gap: 5px;
@@ -144,10 +141,11 @@ a {
     align-items: center;
 }
 
+/* Espace entre les éléments quand le menu forme est ouvert */
 .open-shape .shape .shape-opened {
     row-gap: 12px;
 }
-
+/* Personnalisation des éléments de la liste du menu forme */
 .shape-opened li {
     font-family: 'Encode Sans';
     color: #eaeaea;
@@ -158,7 +156,7 @@ a {
 }
 
 
-/* Outil pointeur */
+/* Outil pointeur/sélection */
 #moveBtn {
     background: url(../icones/Cursor.svg) no-repeat;
     background-size: cover;
@@ -196,13 +194,14 @@ a {
     cursor: pointer;
 }
 
-/* Board / */
+/* Zone de dessin et barre d'outils couleurs/texte */
 .board {
     width: 100%;
     height: 100vh;
     position: relative;
 }
 
+/* Canvas */
 #whiteboard {
     background-color: #FFF;
     position: absolute;
@@ -210,7 +209,7 @@ a {
     top: 10%;
 }
 
-/* / Propriétés / */
+/* Propriétés couleurs/texte */
 .properties {
     width: 216px;
     background: #424242;
@@ -235,7 +234,7 @@ a {
     justify-content: space-between;
 }
 
-/* Titre COLOR */
+/* Titre "Color" */
 .color-title {
     width: 80px;
     height: 30px;
@@ -251,6 +250,7 @@ a {
     font-family: "Encode Sans";
 }
 
+/* Nuancier des couleurs */
 .color-panel {
     width: 188px;
     height: 230px;
@@ -271,6 +271,8 @@ a {
     display: flex;
     justify-content: space-between;
 }
+
+/* Choix couleur de fond */
 #first-color {
     height: 16px;
     width: 16px;
@@ -281,6 +283,7 @@ a {
     z-index: 9;    
 }
 
+/* Choix couleur de bordure */
 #second-color {
     height: 16px;
     width: 16px;
@@ -294,7 +297,6 @@ a {
 }
 
 /* Text */
-/* Text */
 .text-property {
     width: 188px;
     /* height: 220px; */
@@ -304,7 +306,7 @@ a {
     user-select: none;
 }
 
-/* Titre TEXT */
+/* Titre "Text" */
 .text-title {
     width: 80px;
     height: 30px;
@@ -321,12 +323,13 @@ a {
     font-family: "Encode Sans";
 }
 
+/* Ecrire le texte désiré */
 .text-input {
     width: 100%;
     height: 40px;
 }
 
-
+/* Explication de l'input et du highlight */
 .input p, .highlight-text {
     font-family: 'Encode Sans';
     color: #eaeaea;
@@ -335,6 +338,7 @@ a {
     padding-bottom: 2em;
 }
 
+/* Explication de l'input */
 .input p {
     font-style: italic;
 }
@@ -349,13 +353,12 @@ input[type="text"].input-active {
     background-color: #FFF;
 }
 
-
-/* Font Menu Scroll */
+/* Font Menu déroulant */
 .font-menu #default-font {
     padding-left: 10px;
 }
 
-/* Default Font Menu*/
+/* Affichage de la Font Menu*/
 .font-menu #box-font {
     height: 25px;
     border: 1px solid #787C7B;
@@ -365,6 +368,8 @@ input[type="text"].input-active {
     align-items: center;
     justify-content: space-between;
 }
+
+/* Ouverture du menu déroulant font */
 #box-font .box-open-font {
     width: 25px;
     height: 25px;
@@ -437,7 +442,7 @@ input[type="text"].input-active {
     background: url(../icones/Arrow-scroll.svg) no-repeat;
 }
 
-/* Affiche un apercçu de la vrai police indiquée */
+/* Affiche un aperçu de la police sélectionnée */
 #encode-Sans {
     font-family: 'Encode Sans';
     font-weight: 500;

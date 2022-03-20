@@ -82,7 +82,7 @@ textBtn.onclick = () => {
     body.classList.remove('open-file');
     body.classList.remove('open-shape')
     // Active le input du texte quand on a choisi l'outil texte
-    input.classList.toggle('input-active');
+    input.classList.add('input-active');
     input.disabled = false;
 };
 
