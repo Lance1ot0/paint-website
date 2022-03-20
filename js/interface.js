@@ -4,6 +4,8 @@ let fileToggleMenu = document.querySelector('#file-btn, file-arrow');
 // Sélection du menu formes
 let shapeToggleMenu = document.querySelector('.shape')
 
+let saveMenu = document.querySelector('#save-menu');
+
 // Sélection du menu export
 let exportToggleMenu = document.querySelector('#export-as')
 
@@ -23,7 +25,9 @@ let moveBtn = document.querySelector('#moveBtn');
 fileToggleMenu.onclick = () => {
     body.classList.toggle('open-file');
     body.classList.remove('open-shape');
-    body.classList.remove('open-font')
+    body.classList.remove('open-font');
+    body.classList.remove('open-save');
+    document.querySelector('#save-text-input').value = "";
 };
 
 // Attribue une classe spécifique au body lorsque l'on clique sur le menu shape et ferme le menu file s'il est ouvert
@@ -33,9 +37,18 @@ shapeToggleMenu.onclick = () => {
     body.classList.remove('open-font')
 };
 
+// Affiche le menu save au click de la souris
+saveMenu.onmouseover = () => {
+    body.classList.toggle('open-save');
+    body.classList.remove('open-shape');
+    body.classList.remove('open-export');
+};
+
+
 // Affiche le menu export au survol de la souris
 exportToggleMenu.onmouseover = () =>{
     body.classList.toggle('open-export');
+    body.classList.remove('open-save');
 };
 
 // Ferme le menu export au survol de la souris
@@ -69,7 +82,7 @@ textBtn.onclick = () => {
     body.classList.remove('open-file');
     body.classList.remove('open-shape')
     // Active le input du texte quand on a choisi l'outil texte
-    input.classList.add('input-active');
+    input.classList.toggle('input-active');
     input.disabled = false;
 };
 
@@ -86,13 +99,28 @@ highlightCheckBox.onclick = () => {
     }
 };
 
+
 let ctrlKeyPressed = false;
 let zkeyPressed = false;
 let ctrlZpressed = false;
 
 body.onkeydown = event => {
+
+    if(event.key == "Enter")
+    {
+        let nameOfTheDrawingSave = document.querySelector('#save-text-input').value;
+        if(nameOfTheDrawingSave != "")
+        {
+            let object = {"name":nameOfTheDrawingSave, "drawingSettings":shapes}
+            console.log(object);
+            saveDrawing(object, "text");
+        }
+        
+    }
+
     if(event.key == "Control")
     {
+       
         ctrlKeyPressed = true;
     }
 
@@ -162,16 +190,32 @@ nunito.addEventListener('click', function(){
 });
 
 
-const btnDownload = document.getElementById('JPEG-Btn')
+const jpegBtnDownload = document.getElementById('JPEG-Btn')
 
-btnDownload.addEventListener("click", function() {
+jpegBtnDownload.onclick = () =>{
 
     const link = document.createElement('a');
     document.body.appendChild(link)
     link.href = canvas.toDataURL();
-    link.download = "draw" + ".jpeg";
+    link.download = "draw-PNG" + ".jpeg";
     link.click();
     document.body.removeChild(link)
     const dataURI = canvas.toDataURL("image/jpeg");
 
-})
+}
+
+const pdfBtnDownload = document.getElementById('PDF-Btn')
+
+
+pdfBtnDownload.onclick = () =>{
+
+    canvasPos = canvas.getBoundingClientRect();
+    console.log(canvasPos);
+
+
+    let imgData = canvas.toDataURL("image/jpeg", 1.0);
+    let pdf = new jsPDF();
+    pdf.addImage(imgData, 'JPEG', 0, 70, canvasPos.width/4.8, canvasPos.height/4.8);
+    pdf.save("draw-PDF.pdf");
+}
+

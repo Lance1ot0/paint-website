@@ -553,3 +553,7 @@ function textBackground(text, clickX, clickY, backgroundColor, fontColor, firstW
     }
 
 }
+
+// Fond blanc au lancement de la page
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);

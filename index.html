@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shape 4U</title>
+    <title>Paint</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
     <style>
         @font-face {
             font-family: 'Encode Sans';
@@ -24,19 +25,21 @@
 <body>
 
     <div class="wrapper">
-
-        <!-- Barre de navigation -->
         <nav class="navbar">
-
-            <!-- Menu file (sauvegarde, export, ouvrir) -->
             <ul id="file-menu">
                 <li class="file-menu-scroll"><a href="#" id="file-btn">File <img class="arrow-scroll" src="./icones/Arrow-scroll.svg" alt="scroll-arrow" id="file-arrow"></a>
                     <ul class="menu-opened">
                         <li><a href="#">Open...</a></li>
-                        <li><a href="#">Save</a></li>
+                        <li><a href="#" id="save-menu">Save</a>
+                            <div class="saving-tab">
+                                <label for="save-text-input">Write your drawing's name</label>
+                                <input type="text" name="" id="save-text-input">
+                                <span>Already saved? Input the same name!</span>
+                            </div>
+                        </li>
                         <li id="export-as"><a href="#">Export As...</a>
                             <ul class="export-file">
-                                <li><a href="#">PDF</a></li>
+                                <li><a href="#" id="PDF-Btn">PDF</a></li>
                                 <li><a href="#" id="JPEG-Btn">JPEG</a></li>
                             </ul>
                         </li>
@@ -44,92 +47,80 @@
                 </li>
             </ul>
 
-            <!-- Barre d'outils -->
             <div class="tools-menu">
-                <!-- Déplacer -->
                 <div class="tools" id="moveBtn"></div>
                 <ul class="tools">
-                    <!-- Menu formes -->
                     <li class="shape">
                         <div id="shape-choice">
                             <div id="rectangleBtn"></div>
                             <img class="arrow-scroll" src="./icones/Arrow-scroll.svg" alt="scroll-arrow">
                         </div>
-                        <!-- Menu formes ouvert -->
+                        
                         <ul class="shape-opened">
                             <li id="ellipseBtn"><div><img src="./icones/Ellipse.svg" alt="ellipse" id="ellipseLogo">Ellipse</div></li>
                             <li id="triangleBtn"><div><img src="./icones/Triangle.svg" alt="triangle" id="triangleLogo">Triangle</div></li>
                         </ul>
                     </li>
                 </ul>
-                <!-- Outil texte -->
+
                 <div class="tools" id="textBtn"><img src="./icones/Text.svg" alt="" id="textLogo"></div>
             </div>
         </nav>
 
-        <!-- Zone de dessin et barre d'outils couleurs/texte -->
         <div class="board">
-            <!-- Canvas -->
-            <canvas id="whiteboard" width="1000" height="650">
-            </canvas>
+            <canvas id="whiteboard" width="1000" height="650"></canvas>
 
-            <!-- Propriétés couleurs/texte  -->
-            <div class="properties">
-                <!-- Couleur -->
-                <div class="color-property">
-                    <div class="color-title"><p>Color</p></div>
-                    <!-- Nuancier des couleurs -->
-                    <div class="color-panel">
-                        <canvas id="color-chart" height="230" width="160"></canvas>
-                        <canvas id="color-rainbow" height="230" width="18"></canvas>
+                <div class="properties">
+                    <div class="color-property">
+                        <div class="color-title"><p>Color</p></div>
+                        <div class="color-panel">
+                            <canvas id="color-chart" height="230" width="160"></canvas>
+                            <canvas id="color-rainbow" height="230" width="18"></canvas>
+                        </div>
+    
+                        <div class="color-select">
+                            <button id="first-color"></button>
+                            <button id="second-color"></button>
+                        </div>
                     </div>
+    
+                    <div class="text-property">
+                        <div class="text-title"><p>Text</p></div>
 
-                    <!-- Choix couleur de fond/bordure de la forme || couleur de la police/surlignage -->
-                    <div class="color-select">
-                        <button id="first-color"></button>
-                        <button id="second-color"></button>
-                    </div>
+                        <div class="highlight-text">
+                            <input type="checkbox" id="highlight">
+                            <label for="highlight">Highlight text before?</label>
+                        </div>
+                        
+                        <div class="input">
+                            <!-- Le input est disabled, il est cliquable quand on a sélectionné l'outil texte -->
+                            <input disabled type="text" id="write-text" placeholder="Write here!" class="text-input">
+                            <p>Then, click on the board to place it where you want!</p>
+                        </div>
+    
+                        <ul id="font-menu">
+                            <li class="font-menu">
+                                <div id="box-font">
+                                    <a id="default-font" href="#">Encode Sans</a>
+                                    <div class="box-open-font"><div class="arrow-scroll-font"></div></div>
+                                </div>
+                                <ul class="font-opened">
+                                    <li><a id="encode-sans" href="#">Encode Sans</a></li>
+                                    <li><a id="smooch-sans" href="#">Smooch Sans</a></li>
+                                    <li><a id="nunito" href="#">Nunito</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>  
                 </div>
-
-                <!-- Texte -->
-                <div class="text-property">
-                    <div class="text-title"><p>Text</p></div>
-
-                    <!-- Créer un texte avec surlignage ou non -->
-                    <div class="highlight-text">
-                        <input type="checkbox" id="highlight">
-                        <label for="highlight">Highlight text before?</label>
-                    </div>
-                    
-                    <!-- Ecrire le texte désiré -->
-                    <div class="input">
-                        <!-- Le input est disabled, il est cliquable quand on a sélectionné l'outil texte -->
-                        <input disabled type="text" id="write-text" placeholder="Write here!" class="text-input">
-                        <p>Then, click on the board to place it where you want!</p>
-                    </div>
-
-                    <!-- Menu pour choisir la police -->
-                    <ul id="font-menu">
-                        <li class="font-menu">
-                            <div id="box-font">
-                                <a id="default-font" href="#">Encode Sans</a>
-                                <div class="box-open-font"><div class="arrow-scroll-font"></div></div>
-                            </div>
-                            <ul class="font-opened">
-                                <li><a id="encode-sans" href="#">Encode Sans</a></li>
-                                <li><a id="smooch-sans" href="#">Smooch Sans</a></li>
-                                <li><a id="nunito" href="#">Nunito</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>  
-            </div>
-        </div>       
+        </div> 
+        
     </div>
 
-    <!-- JavaScript -->
+   
     <script src="js/interface.js"></script>
     <script src="js/color-picker.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/back.js"></script>
 </body>
 </html>
