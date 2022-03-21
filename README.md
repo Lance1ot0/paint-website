@@ -27,7 +27,7 @@
 <i>Aperçu du site</i>
 
 ### Installation du projet
-Pour lancer le projet, il faut placer le dossier "Shape 4U" dans le répertoire htdocs de mamp. Vous pouvez ensuite lancer mamp, puis dans le navigateur il faut indiquer ce chemin : http://localhost/Shape4/index.html
+Pour lancer le projet, il faut placer le dossier "Shape 4U" dans le répertoire htdocs de mamp. Vous pouvez ensuite lancer mamp, puis dans le navigateur il faut indiquer ce chemin : http://localhost/Shape4U/index.html
 
 ### Technologies utilisées
 #### Frontend
