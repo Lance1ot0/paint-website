@@ -140,7 +140,7 @@ canvas.onmousedown = event => {
         if(writtenText != "")
         {
             // Attribut par défaut la police Encode Sans
-            ctx.font = "48px Encode Sans"
+            ctx.font = "48px Encode Sans";
             console.log( ctx.font);
 
             if(!highlightChecked)
@@ -319,6 +319,7 @@ function stopDrawing(event){
 function drawCanvasShapes(){
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "48px Encode Sans";
     // Parcours le tableau de forme pour les déssiner
 
     for(let i = 0; i < shapes.length; i++)
@@ -344,10 +345,12 @@ function drawCanvasShapes(){
             }
             else if(shapes[i]["shape"] == "textwithoutBg")
             {
+                ctx.font = shapes[i]["font"];
                 writeText(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["fontColor"], false);
             }
             else if(shapes[i]["shape"] == "textAndBg")
             {
+                ctx.font = shapes[i]["font"];
                 textBackground(shapes[i]["text"], shapes[i]["clickX"], shapes[i]["clickY"], shapes[i]["backgroundColor"], shapes[i]["fontColor"], false);
             }
         }
@@ -475,15 +478,14 @@ function alterOriginRectangle(){
 
 // Ecrire un texte
 function writeText(text, clickX, clickY, fontColor, firstWriting) {
+    let selectedFont;
 
     // Récupère la selection de l'utilisateur
     if(firstWriting)
     {
-        font = choosenFont();
+        selectedFont = choosenFont();
+        ctx.font = selectedFont
     }
-
-    let selectedFont = ctx.font;
-   
 
     // Couleur du texte
     ctx.fillStyle = fontColor;
@@ -500,7 +502,6 @@ function writeText(text, clickX, clickY, fontColor, firstWriting) {
             "clickY": clickY,
             "font": selectedFont
         });
-        console.log(shapes);
     }
     
 }
@@ -514,14 +515,11 @@ function choosenFont() {
     let choosenFontSmoochSans = body.classList.contains('smooch-sans');
     let choosenFontEncodeSans = body.classList.contains('encode-sans');
     if (choosenFontNunito) {
-        ctx.font = "48px Nunito"
-        return "Nunito"
+        return "48px Nunito"
     } else if (choosenFontSmoochSans) {
-        ctx.font = "48px Smooch Sans"
-        return "Smooch Sans"
+        return "48px Smooch Sans"
     } else if (choosenFontEncodeSans) {
-        ctx.font = "48px Encode Sans"
-        return "Encode Sans"
+        return "48px Encode Sans"
     }
 }
 
@@ -540,6 +538,7 @@ function textBackground(text, clickX, clickY, backgroundColor, fontColor, firstW
 
     if(firstWriting)
     {
+        console.log(ctx.font);
         shapes.push(
             {"shape": "textAndBg",
             "fontColor": fontColor,

@@ -66,12 +66,12 @@ a {
 }
 
 /* N'affiche pas les List Item (li) de la liste mère */
-.menu-opened, .shape-opened, .export-file, .font-opened {
+.menu-opened, .shape-opened, .export-file, .font-opened, .saving-tab, .open-tab{
     display: none; 
 }
 
 /* Ouvrir le menu file ou menu shape au clic */
-.open-file .file-menu-scroll .menu-opened, .open-shape .shape .shape-opened, .open-save .saving-tab {
+.open-file .file-menu-scroll .menu-opened, .open-shape .shape .shape-opened, .open-save .saving-tab, .open-drawing .open-tab {
     background-color: #141414;
     width: 108px;
 
@@ -91,7 +91,7 @@ a {
 }
 
 /* Ouvrir le menu export ou le menu save au survol */
-.open-export .export-file {
+.open-export .export-file, .open-save .saving-tab, .open-drawing .open-tab{
     background-color: #141414;
     width: 108px;
 
@@ -112,13 +112,32 @@ a {
 
 }
 
+#empty-drawing{
+    font-style: italic;
+    font-family: 'Encode Sans';
+    text-decoration: none;
+    color: #EAEAEA;
+    font-size: 0.75em;
+    padding-left: 20px;
+}
+
+.open-drawing .open-tab{
+    transform: translateY(-26px);
+    width: 150px;
+}
+
+.open-save .saving-tab{
+    transform: translateY(-6px);
+    width: 208px;
+}
+
 /* Descendre la flèche au survol */
 .open-file .file-menu-scroll #arrow-scroll { 
     margin-top: 6px;
 }
 
 /* Change la couleur de fond des liens des menus au survol */
-.menu-opened a:hover, .shape-opened li:hover, .font-opened a:hover {
+.menu-opened a:hover, .shape-opened li:hover, .font-opened a:hover, .open-tab a:hover{
     background-color: #133346;
 }
 
@@ -456,6 +475,7 @@ input[type="text"].input-active {
     font-weight: 500;
 }
 
+/* Ouverture du menu save */
 .saving-tab{
     padding: 0 16px;
     background-color: #141414;

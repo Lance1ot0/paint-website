@@ -2,7 +2,10 @@
 let fileToggleMenu = document.querySelector('#file-btn, file-arrow');
 
 // Sélection du menu formes
-let shapeToggleMenu = document.querySelector('.shape')
+let shapeToggleMenu = document.querySelector('.shape');
+
+let openMenu = document.querySelector('#open-menu');
+let openTab = document.querySelector('.open-tab');
 
 let saveMenu = document.querySelector('#save-menu');
 
@@ -37,18 +40,26 @@ shapeToggleMenu.onclick = () => {
     body.classList.remove('open-font')
 };
 
+openMenu.onmouseover = () => {
+    body.classList.toggle('open-drawing');
+    body.classList.remove('open-shape');
+    body.classList.remove('open-export');
+    body.classList.remove('open-save');
+}
+
 // Affiche le menu save au click de la souris
 saveMenu.onmouseover = () => {
     body.classList.toggle('open-save');
     body.classList.remove('open-shape');
     body.classList.remove('open-export');
+    body.classList.remove('open-drawing');
 };
-
 
 // Affiche le menu export au survol de la souris
 exportToggleMenu.onmouseover = () =>{
     body.classList.toggle('open-export');
     body.classList.remove('open-save');
+    body.classList.remove('open-drawing');
 };
 
 // Ferme le menu export au survol de la souris
@@ -108,12 +119,15 @@ body.onkeydown = event => {
 
     if(event.key == "Enter")
     {
-        let nameOfTheDrawingSave = document.querySelector('#save-text-input').value;
-        if(nameOfTheDrawingSave != "")
+        let nameOfTheDrawingSave = document.querySelector('#save-text-input');
+        if(nameOfTheDrawingSave.value != "")
         {
-            let object = {"name":nameOfTheDrawingSave, "drawingSettings":shapes}
+            let object = {"name":nameOfTheDrawingSave.value, "drawingSettings":shapes}
             console.log(object);
             saveDrawing(object, "text");
+            
+            document.querySelector('#save-state').textContent = nameOfTheDrawingSave.value + ".json saved!";
+            nameOfTheDrawingSave.value = "";
         }
         
     }
