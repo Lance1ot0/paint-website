@@ -52,20 +52,3 @@ function saveDrawing(json_data, responseType){
     xhr.send("jsonFile=" + JSON.stringify(json_data));
     
 }
-
-
-
-// function createNewDrawing() {
-//     if(event.keyCode == 13) {
-//         if(drawingNameTextInput.value != "")
-//         {
-//             let drawingName = drawingNameTextInput.value;
-//             console.log("Name of the new drawing : " + drawingName);
-//             drawingNameTextInput.style.display = "none";
-//             let newDrawingJSONData = {"ID" : drawingName, "status": "new", "shape" : "none"}
-//             console.log(newDrawingJSONData);
-//             saveNewDrawing(newDrawingJSONData, "text");
-//         }
-        
-//     }
-// }
